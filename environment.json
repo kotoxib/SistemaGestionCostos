@@ -1,0 +1,4 @@
+{
+  "identityProviderUrl": "http://dc.sigcomt.com:8082/IdentityProvider",
+  "scgApiUrl": "https://localhost:44407/api"
+}
