@@ -1,0 +1,37 @@
+<section class="fh-shell">
+  <header class="fh-header">
+    <div>
+      <h2>Historial de Modificaciones</h2>
+      <p>{{ feeRequest.code }} · Caso {{ feeRequest.caseNumber }}</p>
+    </div>
+
+    <button class="fh-close" type="button" (click)="close()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="fh-body">
+    @for (entry of feeRequest.history; track $index; let last = $last) {
+      <div class="fh-row">
+        <div class="fh-line">
+          <span class="fh-dot" [ngClass]="dotClass(entry.state)"></span>
+          @if (!last) {
+            <span class="fh-connector"></span>
+          }
+        </div>
+
+        <div class="fh-content">
+          <p class="fh-action">{{ entry.action }}</p>
+          <p class="fh-meta">{{ entry.date }} · {{ entry.time }} · {{ entry.user }}</p>
+          @if (entry.observation) {
+            <p class="fh-observation">{{ entry.observation }}</p>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <footer class="fh-footer">
+    <button class="fh-secondary" type="button" (click)="close()">Cerrar</button>
+  </footer>
+</section>

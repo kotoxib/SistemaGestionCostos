@@ -1,0 +1,114 @@
+<section class="rr-page">
+  <div class="page-header">
+    <div>
+      <h1>Reporte de Reembolsos</h1>
+      <p>Consolidado de reembolsos generados y procesados por cliente</p>
+    </div>
+
+    <button class="secondary-action" type="button" (click)="exportReport(dt)">
+      <i class="pi pi-download" aria-hidden="true"></i>
+      <span>Exportar</span>
+    </button>
+  </div>
+
+  <section class="kpi-grid">
+    <article class="kpi-card">
+      <span class="kpi-label">Total Reembolsos</span>
+      <strong class="kpi-value kpi-dark">{{ kpis().totalCount }}</strong>
+      <span class="kpi-detail">Reembolsos registrados</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Monto Total</span>
+      <strong class="kpi-value kpi-dark">S/ {{ kpis().totalAmount | number: '1.2-2' }}</strong>
+      <span class="kpi-detail">Suma de todos los reembolsos</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Monto Procesado</span>
+      <strong class="kpi-value kpi-info">S/ {{ kpis().processedAmount | number: '1.2-2' }}</strong>
+      <span class="kpi-detail">Reembolsos en estado Procesado</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Pendientes</span>
+      <strong class="kpi-value kpi-orange">{{ kpis().pendingCount }}</strong>
+      <span class="kpi-detail">Reembolsos en estado Generado</span>
+    </article>
+  </section>
+
+  <div class="filters-row">
+    <label class="search-box">
+      <i class="pi pi-search" aria-hidden="true"></i>
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por N° de Reembolso o Cliente…" />
+    </label>
+
+    <p-select
+      [(ngModel)]="selectedClient"
+      [options]="clientOptions()"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Cliente"
+      [showClear]="true" />
+
+    <p-select
+      [(ngModel)]="selectedState"
+      [options]="stateOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Estado"
+      [showClear]="true" />
+
+    <p-datepicker [(ngModel)]="dateFrom" placeholder="Desde" dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body" />
+    <p-datepicker [(ngModel)]="dateTo" placeholder="Hasta" dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body" />
+
+    @if (searchTerm || selectedClient || selectedState || dateFrom || dateTo) {
+      <button class="clear-filters" type="button" (click)="clearFilters()">Limpiar</button>
+    }
+  </div>
+
+  <div class="table-card">
+    <p-table
+      #dt
+      [value]="filteredRefunds"
+      [columns]="exportColumns"
+      [exportFilename]="'reporte-reembolsos'"
+      [loading]="loading()"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [tableStyle]="{ 'min-width': '860px' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>N° DE REEMBOLSO</th>
+          <th>CLIENTE</th>
+          <th class="txt-right">MONTO TOTAL</th>
+          <th class="txt-center">ESTADO</th>
+          <th>FECHA</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td class="rr-code">{{ row.caseNumber }}</td>
+          <td class="cell-bold">{{ row.clientName }}</td>
+          <td class="txt-right cell-bold">S/ {{ row.totalAmount | number: '1.2-2' }}</td>
+          <td class="txt-center">
+            <span class="badge" [ngClass]="stateBadgeClass(row.state)">{{ row.state }}</span>
+          </td>
+          <td class="text-muted">{{ row.date | date: 'dd/MM/yyyy' }}</td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" class="empty-table">No se encontraron reembolsos con los filtros aplicados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>

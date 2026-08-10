@@ -1,0 +1,124 @@
+<section class="ir-page">
+  <div class="page-header">
+    <div>
+      <h1>Reporte de Ingresos</h1>
+      <p>Consolidado de ingresos y cobranza por caso</p>
+    </div>
+
+    <button class="secondary-action" type="button" (click)="exportReport(dt)">
+      <i class="pi pi-download" aria-hidden="true"></i>
+      <span>Exportar</span>
+    </button>
+  </div>
+
+  <section class="kpi-grid">
+    <article class="kpi-card">
+      <span class="kpi-label">Total Ingresos</span>
+      <strong class="kpi-value kpi-dark">{{ kpis().totalCount }}</strong>
+      <span class="kpi-detail">Casos con ingresos registrados</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Monto Proyectado</span>
+      <strong class="kpi-value kpi-dark">S/ {{ kpis().totalProjected | number: '1.2-2' }}</strong>
+      <span class="kpi-detail">Suma de montos totales de caso</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Ingresos Reales</span>
+      <strong class="kpi-value kpi-green">S/ {{ kpis().totalReal | number: '1.2-2' }}</strong>
+      <span class="kpi-detail">Pagos registrados en Ingresos</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Saldo Pendiente</span>
+      <strong class="kpi-value kpi-orange">S/ {{ kpis().totalBalance | number: '1.2-2' }}</strong>
+      <span class="kpi-detail">Diferencia entre lo proyectado y lo real</span>
+    </article>
+  </section>
+
+  <div class="filters-row">
+    <label class="search-box">
+      <i class="pi pi-search" aria-hidden="true"></i>
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por N° Ingreso, N° Caso o Cliente…" />
+    </label>
+
+    <p-select
+      [(ngModel)]="selectedClient"
+      [options]="clientOptions()"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Cliente"
+      [showClear]="true" />
+
+    <p-select
+      [(ngModel)]="selectedState"
+      [options]="stateOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Estado"
+      [showClear]="true" />
+
+    <p-datepicker [(ngModel)]="dateFrom" placeholder="Desde" dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body" />
+    <p-datepicker [(ngModel)]="dateTo" placeholder="Hasta" dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body" />
+
+    @if (searchTerm || selectedClient || selectedState || dateFrom || dateTo) {
+      <button class="clear-filters" type="button" (click)="clearFilters()">Limpiar</button>
+    }
+  </div>
+
+  <div class="table-card">
+    <p-table
+      #dt
+      [value]="filteredIncomes"
+      [columns]="exportColumns"
+      [exportFilename]="'reporte-ingresos'"
+      [loading]="loading()"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [tableStyle]="{ 'min-width': '1080px' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>N° INGRESO</th>
+          <th>N° DE CASO</th>
+          <th>CLIENTE</th>
+          <th class="txt-right">MONTO PROYECTADO</th>
+          <th class="txt-right">INGRESO REAL</th>
+          <th class="txt-right">SALDO</th>
+          <th class="txt-center">% REAL</th>
+          <th class="txt-center">ESTADO</th>
+          <th>ÚLTIMO PAGO</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td class="ir-code">{{ row.incomeNumber }}</td>
+          <td class="cell-bold">{{ row.caseNumber }}</td>
+          <td class="cell-bold">{{ row.clientName }}</td>
+          <td class="txt-right">S/ {{ row.caseAmount | number: '1.2-2' }}</td>
+          <td class="txt-right text-green">S/ {{ row.paidAmount | number: '1.2-2' }}</td>
+          <td class="txt-right cell-bold" [class.text-green]="row.balance === 0">
+            S/ {{ row.balance | number: '1.2-2' }}
+          </td>
+          <td class="txt-center">{{ row.paidPercentage }}%</td>
+          <td class="txt-center">
+            <span class="badge" [ngClass]="stateBadgeClass(row.state)">{{ row.state }}</span>
+          </td>
+          <td class="text-muted">{{ row.lastPaymentDate ? (row.lastPaymentDate | date: 'dd/MM/yyyy') : '—' }}</td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="9" class="empty-table">No se encontraron ingresos con los filtros aplicados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>

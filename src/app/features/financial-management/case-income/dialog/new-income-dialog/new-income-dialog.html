@@ -1,0 +1,80 @@
+<section class="ni-shell">
+  <header class="ni-header">
+    <div>
+      <h2>Nuevo Ingreso</h2>
+      <p>Registra un nuevo ingreso a partir de un caso judicial</p>
+    </div>
+
+    <button class="ni-close" type="button" (click)="close()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="ni-body">
+    <p class="ni-section-title">Datos del Ingreso</p>
+
+    <div class="ni-grid">
+      <div class="ni-field">
+        <label for="ni-case">Nro. Caso <strong>*</strong></label>
+        <p-select
+          inputId="ni-case"
+          [(ngModel)]="selectedCaseId"
+          [options]="caseOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar caso..." />
+      </div>
+
+      <div class="ni-field">
+        <label for="ni-amount">Monto Total del Caso</label>
+        <input id="ni-amount" pInputText type="text" [value]="selectedCase()?.amount ?? '—'" readonly />
+      </div>
+
+      <div class="ni-field">
+        <label for="ni-currency">Moneda</label>
+        <input id="ni-currency" pInputText type="text" [value]="selectedCase()?.currency ?? '—'" readonly />
+      </div>
+
+      <div class="ni-field">
+        <label for="ni-client">Cliente</label>
+        <input id="ni-client" pInputText type="text" [value]="selectedCase()?.client ?? '—'" readonly />
+      </div>
+
+      <div class="ni-field">
+        <label for="ni-responsible">Responsable</label>
+        <input id="ni-responsible" pInputText type="text" value="Administrador" readonly />
+      </div>
+
+      <div class="ni-field">
+        <label for="ni-state">Estado</label>
+        <input id="ni-state" pInputText type="text" value="Sin pagos" readonly />
+      </div>
+    </div>
+
+    <p class="ni-section-title ni-mt">Pagos Registrados</p>
+
+    <div class="ni-payments-summary">
+      <div class="ni-field">
+        <label for="ni-paid">Monto Pagado</label>
+        <input id="ni-paid" pInputText type="text" value="S/ 0.00" readonly />
+      </div>
+      <div class="ni-field">
+        <label for="ni-balance">Saldo Pendiente</label>
+        <input id="ni-balance" pInputText type="text" value="—" readonly />
+      </div>
+      <div class="ni-field">
+        <label for="ni-percentage">% Cobrado</label>
+        <input id="ni-percentage" pInputText type="text" value="0%" readonly />
+      </div>
+    </div>
+
+    <p class="ni-empty">Sin pagos registrados</p>
+  </div>
+
+  <footer class="ni-footer">
+    <button class="ni-secondary" type="button" (click)="close()">Cancelar</button>
+    <button class="ni-primary" type="button" [disabled]="!selectedCaseId()" (click)="save()">
+      Aceptar
+    </button>
+  </footer>
+</section>

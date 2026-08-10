@@ -1,0 +1,93 @@
+<section class="bd-shell">
+  <header class="bd-header">
+    <div>
+      <h2>{{ title }}</h2>
+      <p>Carga masiva de documentos por caso desde Excel</p>
+    </div>
+
+    <button class="bd-close" type="button" (click)="cancel()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="bd-body">
+    <div
+      class="bd-dropzone"
+      [class.drag-over]="isDragOver()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)">
+      <input #fileInput type="file" accept=".xlsx,.xls" class="bd-file-input" (change)="onFileSelected($event)" />
+
+      <i class="pi pi-upload" aria-hidden="true"></i>
+      <p>Arrastra y suelta tu archivo aquí o</p>
+
+      <button class="bd-template-button" type="button" (click)="openFilePicker()">
+        Buscar archivo
+      </button>
+
+      @if (selectedFileName()) {
+        <span class="bd-selected-file">
+          <i class="pi pi-file-excel" aria-hidden="true"></i>
+          {{ selectedFileName() }}
+        </span>
+      }
+
+      @if (fileError()) {
+        <span class="bd-file-error">{{ fileError() }}</span>
+      }
+    </div>
+
+    @if (previewRows().length > 0) {
+      <p class="bd-summary">
+        <strong>{{ matchedCount() }}</strong> de {{ previewRows().length }} registros encontrados y listos para actualizar.
+      </p>
+    }
+
+    <div class="bd-preview-card">
+      <p-table [value]="previewRows()" [tableStyle]="{ 'min-width': '760px' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Código</th>
+            <th>N° de Caso</th>
+            <th>Cliente</th>
+            <th>Concepto</th>
+            <th>Archivo</th>
+            <th class="txt-center">Encontrado</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td class="bd-code">{{ row.code }}</td>
+            <td>{{ row.caseNumber }}</td>
+            <td>{{ row.clientName }}</td>
+            <td>{{ row.concept }}</td>
+            <td class="text-muted">{{ row.fileName }}</td>
+            <td class="txt-center">
+              <span class="badge" [ngClass]="row.found ? 'badge-active' : 'badge-inactive'">
+                {{ row.found ? 'Sí' : 'No' }}
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="6" class="bd-empty">
+              Sin datos cargados. Sube un archivo Excel para previsualizar los registros.
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <footer class="bd-footer">
+    <button class="bd-cancel" type="button" (click)="cancel()">Cancelar</button>
+    <button class="bd-upload" type="button" [disabled]="matchedCount() === 0" (click)="confirm()">
+      <i class="pi pi-check" aria-hidden="true"></i>
+      <span>Confirmar Carga</span>
+    </button>
+  </footer>
+</section>

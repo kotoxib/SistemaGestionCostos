@@ -1,0 +1,68 @@
+/* Botones de acción en tablas */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  background: transparent;
+}
+.btn-view {
+  color: #0ea5e9;
+  background: #f0f9ff;
+}
+.btn-view:hover {
+  background: #e0f2fe;
+}
+.btn-view:disabled {
+  color: #d1d5db;
+  background: #f9fafb;
+  cursor: not-allowed;
+}
+.btn-edit {
+  color: #f47920;
+  background: #fff7ed;
+}
+.btn-edit:hover {
+  background: #ffedd5;
+}
+.btn-del {
+  color: #ef4444;
+  background: #fef2f2;
+}
+.btn-del:hover {
+  background: #fee2e2;
+}
+.btn-del:disabled {
+  color: #d1d5db;
+  background: #f9fafb;
+  cursor: not-allowed;
+}
+.btn-more {
+  color: #6b7280;
+  background: #f3f4f6;
+}
+.btn-more:hover {
+  color: var(--orange);
+  background: #fff7ed;
+}
+.btn-more:disabled {
+  color: #d1d5db;
+  background: #f9fafb;
+  cursor: not-allowed;
+}
+.btn-icon-disabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  color: #d1d5db;
+  background: #f9fafb;
+  cursor: not-allowed;
+}

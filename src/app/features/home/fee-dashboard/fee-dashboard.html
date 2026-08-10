@@ -1,0 +1,155 @@
+<section class="dashboard-page">
+  <header class="dashboard-header">
+    <div>
+      <h1>Dashboard de Gastos</h1>
+      <p>Consolidado de solicitudes de gasto, reembolsos y demandas del módulo SGC</p>
+    </div>
+  </header>
+
+  <div class="filters-row">
+    <p-select
+      [(ngModel)]="selectedYear"
+      [options]="yearOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Año"
+      [showClear]="true" />
+
+    <p-select
+      [(ngModel)]="selectedMonth"
+      [options]="monthOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Mes"
+      [showClear]="true" />
+
+    <p-select
+      [(ngModel)]="selectedAttorney"
+      [options]="attorneyOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Abogado Asignado"
+      [showClear]="true" />
+
+    <p-select
+      [(ngModel)]="selectedExpenseType"
+      [options]="expenseTypeOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Tipo de Gasto"
+      [showClear]="true" />
+
+    @if (selectedYear() || selectedMonth() || selectedAttorney() || selectedExpenseType()) {
+      <button type="button" class="clear-filters" (click)="clearFilters()">Limpiar</button>
+    }
+  </div>
+
+  <section class="kpi-grid">
+    <article class="kpi-card">
+      <span class="kpi-label">Total solicitudes</span>
+      <strong class="kpi-value kpi-dark">{{ totalExpenseRequests() | number }}</strong>
+      <span class="kpi-detail detail-blue">Registradas según los filtros</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Monto total de gastos</span>
+      <strong class="kpi-value kpi-dark">S/ {{ totalExpenses() | number: '1.2-2' }}</strong>
+      <span class="kpi-detail detail-blue">Suma de solicitudes filtradas</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Total reembolsado</span>
+      <strong class="kpi-value kpi-orange">S/ {{ totalRefundsAmount() | number: '1.2-2' }}</strong>
+      <span class="kpi-detail detail-orange">{{ filteredRefunds().length }} reembolso{{ filteredRefunds().length !== 1 ? 's' : '' }} generado{{ filteredRefunds().length !== 1 ? 's' : '' }}</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Demandas pendientes</span>
+      <strong class="kpi-value kpi-red">{{ lawsuitPendingCount() | number }}</strong>
+      <span class="kpi-detail detail-red">Sin estado final registrado</span>
+    </article>
+  </section>
+
+  <section class="charts-grid">
+    <article class="panel-card chart-card">
+      <div class="panel-header">
+        <h2>Solicitudes de Gasto por Estado</h2>
+      </div>
+
+      <div class="doughnut-box">
+        <canvas
+          baseChart
+          [type]="'doughnut'"
+          [data]="feeRequestStateChartData()"
+          [options]="feeRequestStateChartOptions"
+        ></canvas>
+        <div class="doughnut-center">
+          <strong>{{ totalExpenseRequests() | number }}</strong>
+          <span>Solicitudes</span>
+        </div>
+      </div>
+
+      <div class="chart-legend">
+        <div class="legend-item"><span class="dot dot-sky"></span>Registrado</div>
+        <div class="legend-item"><span class="dot dot-green"></span>Pagado</div>
+        <div class="legend-item"><span class="dot dot-purple"></span>Reembolsado</div>
+        <div class="legend-item"><span class="dot dot-dark"></span>Concluído</div>
+      </div>
+    </article>
+
+    <article class="panel-card chart-card">
+      <div class="panel-header">
+        <h2>Demandas Registradas vs Pendientes</h2>
+      </div>
+
+      <div class="progress-list">
+        @for (metric of progressMetrics(); track metric.label) {
+          <div class="progress-row">
+            <div class="progress-row-head">
+              <span>{{ metric.label }}</span>
+              <strong [ngClass]="'text-' + metric.tone">{{ metric.value }}</strong>
+            </div>
+            <div class="progress-track">
+              <div
+                class="progress-fill"
+                [ngClass]="'fill-' + metric.tone"
+                [style.width.%]="metric.percentage"
+              >
+                <span>{{ metric.percentage }}%</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="progress-total">
+          <span>Total demandas</span>
+          <strong>{{ lawsuitTotal() | number }}</strong>
+        </div>
+        <div class="progress-period">
+          <span>Pendientes: sin estado final (check) registrado</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel-card chart-card chart-card-wide">
+      <div class="panel-header vs-panel-header">
+        <h2>Gastos vs Reembolsos</h2>
+        <span class="axis-label">{{ vsChartAxisLabel() }}</span>
+      </div>
+
+      <div class="chart-legend chart-legend-top">
+        <div class="legend-item"><span class="dot dot-hollow" style="--dot-color: #F47920"></span>Gastos</div>
+        <div class="legend-item"><span class="dot dot-hollow" style="--dot-color: #8B5CF6"></span>Reembolsos</div>
+      </div>
+
+      <div class="chart-box">
+        <canvas
+          baseChart
+          [type]="'line'"
+          [data]="expenseVsRefundChartData()"
+          [options]="expenseVsRefundChartOptions"
+        ></canvas>
+      </div>
+    </article>
+  </section>
+</section>

@@ -1,0 +1,13 @@
+<ng-progress ngProgressRouter ease="linear" color="#f47920" />
+<ng-http-loader
+  [backdrop]="true"
+  [backdropBackgroundColor]="'#00000085'"
+  [debounceDelay]="100"
+  [extraDuration]="300"
+  [minDuration]="300"
+  [opacity]="'.6'"
+  [backgroundColor]="'#f47920'"
+  spinner="sk-three-bounce"
+/>
+<router-outlet />
+<p-toast />

@@ -1,0 +1,30 @@
+@use "primeicons/primeicons.css";
+@use './styles/settings';
+
+@use './styles/base';
+@use './styles/components';
+@use './styles/utilities';
+
+/* Siempre al final */
+@use './styles/vendors';
+
+.p-fileupload {
+  border: 0;
+}
+
+.p-fileupload .p-fileupload-header {
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+}
+
+.p-fileupload .p-fileupload-content {
+  padding: 0;
+  border: 0;
+}
+
+.p-datepicker input,
+.p-select-label {
+  font-size: 14px;
+}
+

@@ -1,0 +1,163 @@
+:host {
+  display: block;
+}
+
+.du-shell {
+  background: #ffffff;
+}
+
+.du-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #edf1f6;
+}
+
+.du-header h2 {
+  margin: 0;
+  color: #202532;
+  font-size: 17px;
+  font-weight: 950;
+}
+
+.du-header p {
+  margin: 6px 0 0;
+  color: #596578;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.du-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #98a2b3;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.du-close:hover {
+  background: #f4f6fb;
+  color: #344054;
+}
+
+.du-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+}
+
+.du-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.du-field.du-disabled {
+  opacity: 0.6;
+}
+
+.du-field label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #687286;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+}
+
+.du-na {
+  color: #9ca3af;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.du-file-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  padding: 0 4px 0 14px;
+  border: 1px solid #d9dfeb;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.du-file-name {
+  flex: 1;
+  overflow: hidden;
+  color: #596578;
+  font-size: 13px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.du-file-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 14px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #d9dfeb;
+  color: #414b5e;
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.du-file-button:hover {
+  border-color: #fb7419;
+  color: #fb7419;
+}
+
+.du-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 16px 24px;
+  border-top: 1px solid #edf1f6;
+}
+
+.du-secondary,
+.du-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  min-width: 112px;
+  padding: 0 22px;
+  border: 1px solid #d9dfeb;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.du-secondary {
+  background: #ffffff;
+  color: #414b5e;
+}
+
+.du-primary {
+  border-color: #fb7419;
+  background: #fb7419;
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(251, 116, 25, 0.24);
+}

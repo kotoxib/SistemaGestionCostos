@@ -1,0 +1,80 @@
+<section class="ah-shell">
+  <header class="ah-header">
+    <div>
+      <h2>Historial de Pagos al Abogado</h2>
+      <p>{{ attorney }}</p>
+    </div>
+
+    <button class="ah-close" type="button" (click)="close()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="ah-body">
+    <div class="history-pills">
+      @if (historySummary.advance.count > 0) {
+        <span class="pill pill-amber">
+          <span class="pill-count">{{ historySummary.advance.count }}</span>
+          Adelanto{{ historySummary.advance.count > 1 ? 's' : '' }}
+          <span class="pill-amount">S/ {{ historySummary.advance.amount | number: '1.2-2' }}</span>
+        </span>
+      }
+      @if (historySummary.partial.count > 0) {
+        <span class="pill pill-blue">
+          <span class="pill-count">{{ historySummary.partial.count }}</span>
+          Pago{{ historySummary.partial.count > 1 ? 's' : '' }} Parcial{{ historySummary.partial.count > 1 ? 'es' : '' }}
+          <span class="pill-amount">S/ {{ historySummary.partial.amount | number: '1.2-2' }}</span>
+        </span>
+      }
+      @if (historySummary.total.count > 0) {
+        <span class="pill pill-green">
+          <span class="pill-count">{{ historySummary.total.count }}</span>
+          Pago{{ historySummary.total.count > 1 ? 's' : '' }} Total{{ historySummary.total.count > 1 ? 'es' : '' }}
+          <span class="pill-amount">S/ {{ historySummary.total.amount | number: '1.2-2' }}</span>
+        </span>
+      }
+    </div>
+
+    <p-table [value]="advanceHistory" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '880px' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>N° CASO</th>
+          <th>CLIENTE</th>
+          <th>FECHA</th>
+          <th>ID PAGO</th>
+          <th class="txt-center">TIPO</th>
+          <th class="txt-right">MONTO</th>
+          <th>COMENTARIOS</th>
+          <th class="txt-center">ESTADO</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-entry>
+        <tr>
+          <td class="mono">{{ entry.caseNumber }}</td>
+          <td>{{ entry.clientName }}</td>
+          <td class="text-muted">{{ entry.date }}</td>
+          <td class="mono text-muted">{{ entry.id }}</td>
+          <td class="txt-center">
+            <span class="badge" [ngClass]="advanceTypeBadge(entry.type)">{{ advanceTypeLabel(entry.type) }}</span>
+          </td>
+          <td class="txt-right cell-bold">S/ {{ entry.amount | number: '1.2-2' }}</td>
+          <td class="text-muted truncate" [title]="entry.comment ?? ''">{{ entry.comment ?? '—' }}</td>
+          <td class="txt-center">
+            <span class="badge" [ngClass]="advanceStateBadge(entry.state)">{{ entry.state }}</span>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8" class="empty-table">No se encontraron pagos registrados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <footer class="ah-footer">
+    <button class="ah-secondary" type="button" (click)="close()">Cerrar</button>
+  </footer>
+</section>

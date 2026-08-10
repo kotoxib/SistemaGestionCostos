@@ -1,0 +1,217 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.config-table-card {
+  background: var(--color-white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .config-p-table {
+  width: 100%;
+}
+
+:host ::ng-deep .config-p-table .p-datatable-wrapper {
+  border-radius: 16px;
+}
+
+:host ::ng-deep .config-p-table .p-datatable-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+
+:host ::ng-deep .config-p-table .p-datatable-thead > tr > th {
+  background: var(--color-white);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: 12px 14px;
+  border: none;
+  border-bottom: 2px solid var(--border);
+}
+
+:host ::ng-deep .config-p-table .p-datatable-tbody > tr > td {
+  color: var(--text);
+  padding: 13px 14px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+:host ::ng-deep .config-p-table .p-datatable-tbody > tr:last-child > td {
+  border-bottom: none;
+}
+
+:host ::ng-deep .config-p-table .p-datatable-tbody > tr:hover > td {
+  background: rgba(0, 102, 204, .03);
+}
+
+.config-table-th,
+.config-table-td {
+  text-align: left;
+}
+
+.txt-center {
+  text-align: center;
+}
+
+.txt-right {
+  text-align: right;
+}
+
+.cell-bold {
+  font-weight: 700;
+}
+
+.cell-nowrap {
+  white-space: nowrap;
+}
+
+.config-cell-wrap {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+}
+
+.config-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 20px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.badge-default {
+  background: #F3F4F6;
+  color: #374151;
+}
+
+.badge-role,
+.badge-admin,
+.badge-operator,
+.badge-viewer {
+  background: #EFF6FF;
+  color: #1D4ED8;
+}
+
+.badge-active {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.badge-inactive {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+.config-table-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background .15s, transform .12s, opacity .12s;
+}
+
+.btn-icon:hover {
+  transform: translateY(-1px);
+}
+
+.btn-icon:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-view {
+  background: #F0F9FF;
+  color: #0369A1;
+}
+
+.btn-view:hover {
+  background: #BAE6FD;
+}
+
+.btn-edit {
+  background: #EFF6FF;
+  color: #1D4ED8;
+}
+
+.btn-edit:hover {
+  background: #DBEAFE;
+}
+
+.btn-del {
+  background: #FFF1F2;
+  color: #BE123C;
+}
+
+.btn-del:hover {
+  background: #FFE4E6;
+}
+
+.table-material-icon {
+  font-size: 18px;
+  line-height: 1;
+  font-weight: normal;
+  font-style: normal;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 20;
+}
+
+.empty-table {
+  text-align: center;
+  padding: 28px !important;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+:host ::ng-deep .config-p-table .p-paginator {
+  border: none;
+  border-top: 1px solid var(--border);
+  background: var(--color-white);
+  padding: 10px 14px;
+}
+
+:host ::ng-deep .config-p-table .p-paginator .p-paginator-page,
+:host ::ng-deep .config-p-table .p-paginator .p-paginator-next,
+:host ::ng-deep .config-p-table .p-paginator .p-paginator-prev,
+:host ::ng-deep .config-p-table .p-paginator .p-paginator-first,
+:host ::ng-deep .config-p-table .p-paginator .p-paginator-last {
+  min-width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+
+:host ::ng-deep .config-p-table .p-paginator .p-paginator-page.p-highlight,
+:host ::ng-deep .config-p-table .p-paginator .p-paginator-page.p-paginator-page-selected {
+  background: var(--color-prim);
+  color: var(--color-white);
+}

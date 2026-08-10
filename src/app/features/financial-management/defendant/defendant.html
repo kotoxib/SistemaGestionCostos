@@ -1,0 +1,99 @@
+<section class="dm-page">
+  <div class="page-header">
+    <div>
+      <h1>Demandados</h1>
+      <p>Registro de demandados con plantillas asignadas por cliente</p>
+    </div>
+
+    <button class="primary-action" type="button" (click)="openCreateDialog()">
+      <i class="pi pi-plus" aria-hidden="true"></i>
+      <span>Agregar Demandado</span>
+    </button>
+  </div>
+
+  <div class="filters-row">
+    <label class="search-box">
+      <i class="pi pi-search" aria-hidden="true"></i>
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por Nombre o N° de Documento…" />
+    </label>
+
+    <p-datepicker
+      [(ngModel)]="registrationDate"
+      placeholder="Fecha de Registro"
+      dateFormat="yy-mm-dd"
+      [showIcon]="true"
+      appendTo="body" />
+
+    <p-select
+      [(ngModel)]="selectedState"
+      [options]="stateOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Estado"
+      [showClear]="true" />
+
+    @if (searchTerm || registrationDate || selectedState) {
+      <button class="clear-filters" type="button" (click)="clearFilters()">Limpiar</button>
+    }
+  </div>
+
+  <div class="table-card">
+    <p-table
+      [value]="filteredDefendants"
+      [paginator]="true"
+      [rows]="8"
+      [rowsPerPageOptions]="[8, 16, 32]"
+      [tableStyle]="{ 'min-width': '1220px' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>CLIENTE</th>
+          <th>DEMANDADO</th>
+          <th>TIPO DOC.</th>
+          <th>N° DOCUMENTO</th>
+          <th>ROL LEGAL</th>
+          <th>PLANTILLA REEMBOLSO</th>
+          <th>MODELO ARCHIVO</th>
+          <th class="txt-center">ESTADO</th>
+          <th class="txt-center">ACCIONES</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td class="cell-bold">{{ row.clientName }}</td>
+          <td class="cell-bold">{{ row.fullName }}</td>
+          <td class="text-muted">{{ row.documentType }}</td>
+          <td class="mono">{{ row.documentNumber }}</td>
+          <td>
+            <span class="role-badge" [ngClass]="legalRoleClass(row.legalRole)">{{ row.legalRole }}</span>
+          </td>
+          <td class="text-muted truncate" [title]="row.refundTemplate">{{ row.refundTemplate || '—' }}</td>
+          <td class="text-muted truncate" [title]="row.fileModel">{{ row.fileModel || '—' }}</td>
+          <td class="txt-center">
+            <span class="badge" [ngClass]="stateBadgeClass(row.state)">{{ row.state }}</span>
+          </td>
+          <td class="txt-center">
+            <div class="row-actions">
+              <button class="btn-icon btn-edit" title="Editar" (click)="openEditDialog(row)">
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button class="btn-icon btn-del" title="Eliminar" (click)="deleteDefendant(row)">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="9" class="empty-table">No hay demandados registrados</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>

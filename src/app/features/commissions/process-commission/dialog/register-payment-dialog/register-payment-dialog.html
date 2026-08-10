@@ -1,0 +1,92 @@
+<section class="pp-shell">
+  <header class="pp-header">
+    <div>
+      <h2>Registrar Desembolso de Comisión</h2>
+      <p>Caso {{ caseRow.caseNumber }}</p>
+    </div>
+
+    <button class="pp-close" type="button" (click)="close()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="pp-body">
+    @if (caseRow.paidPercentage < 100) {
+      <div class="pp-banner pp-banner-amber">
+        <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+        <div>
+          <p class="pp-banner-title">El cliente aún tiene pagos pendientes</p>
+          <p class="pp-banner-text">{{ caseRow.paidPercentage }}% cobrado — el tipo sugerido es <strong>Adelanto</strong></p>
+        </div>
+      </div>
+    } @else {
+      <div class="pp-banner pp-banner-green">
+        <i class="pi pi-check-circle" aria-hidden="true"></i>
+        <div>
+          <p class="pp-banner-title">Caso cobrado al 100% — utilidad real disponible</p>
+          <p class="pp-banner-text">Puedes registrar un pago parcial o liquidar la comisión completa</p>
+        </div>
+      </div>
+    }
+
+    <div class="pp-grid">
+      <div class="pp-field">
+        <label for="pp-case">N° Caso</label>
+        <input id="pp-case" pInputText type="text" [value]="caseRow.caseNumber" disabled />
+      </div>
+      <div class="pp-field">
+        <label for="pp-paid">% Cobrado al cliente</label>
+        <input id="pp-paid" pInputText type="text" [value]="caseRow.paidPercentage + '%'" disabled />
+      </div>
+      <div class="pp-field">
+        <label for="pp-total">Comisión Total</label>
+        <input id="pp-total" pInputText type="text" [value]="'S/ ' + (caseRow.commissionAmount | number: '1.2-2')" disabled />
+      </div>
+      <div class="pp-field">
+        <label for="pp-balance">Saldo Pendiente</label>
+        <input id="pp-balance" pInputText type="text" [value]="'S/ ' + (caseRow.commissionBalance | number: '1.2-2')" disabled />
+      </div>
+    </div>
+
+    <div class="pp-field">
+      <label for="pp-type">Tipo de desembolso <strong>*</strong></label>
+      <p-select
+        inputId="pp-type"
+        [(ngModel)]="type"
+        [options]="typeOptions"
+        optionLabel="label"
+        optionValue="value" />
+    </div>
+
+    <div class="pp-field">
+      <label for="pp-amount">Monto a desembolsar <strong>*</strong></label>
+      <p-inputnumber
+        inputId="pp-amount"
+        [(ngModel)]="amount"
+        mode="decimal"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+        placeholder="0.00" />
+      @if (!isOverdraft()) {
+        <p class="pp-hint">Máximo permitido: S/ {{ caseRow.commissionBalance | number: '1.2-2' }}</p>
+      }
+    </div>
+
+    @if (isOverdraft()) {
+      <div class="pp-banner pp-banner-red">
+        <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+        <p class="pp-banner-text">El monto excede el saldo pendiente de comisión.</p>
+      </div>
+    }
+
+    <div class="pp-field">
+      <label for="pp-comment">Comentario</label>
+      <textarea id="pp-comment" pTextarea rows="2" [(ngModel)]="comment" placeholder="Notas adicionales (opcional)"></textarea>
+    </div>
+  </div>
+
+  <footer class="pp-footer">
+    <button class="pp-secondary" type="button" (click)="close()">Cancelar</button>
+    <button class="pp-primary" type="button" [disabled]="!canSave" (click)="save()">Registrar</button>
+  </footer>
+</section>

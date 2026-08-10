@@ -1,0 +1,121 @@
+<section class="df-shell">
+  <header class="df-header">
+    <div>
+      <h2>{{ isEdit ? 'Editar Demandado' : 'Agregar Demandado' }}</h2>
+      <p>Datos del demandado y plantillas asociadas al cliente</p>
+    </div>
+
+    <button class="df-close" type="button" (click)="close()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="df-body">
+    <div class="df-grid">
+      <div class="df-field">
+        <label for="df-client">Cliente <strong>*</strong></label>
+        <p-select
+          inputId="df-client"
+          [ngModel]="selectedClient()"
+          (ngModelChange)="onClientChange($event)"
+          [options]="clientOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar cliente"
+          appendTo="body" />
+      </div>
+
+      <div class="df-field">
+        <label for="df-defendant">Demandado <strong>*</strong></label>
+        <p-select
+          inputId="df-defendant"
+          [ngModel]="selectedDefendantName()"
+          (ngModelChange)="onDefendantChange($event)"
+          [options]="defendantOptions()"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar"
+          [disabled]="!selectedClient()"
+          appendTo="body" />
+      </div>
+
+      <div class="df-field">
+        <label for="df-doctype">Tipo de Documento</label>
+        <input id="df-doctype" pInputText type="text" [value]="documentType()" disabled placeholder="Auto-completado" />
+      </div>
+
+      <div class="df-field">
+        <label for="df-docnumber">N° de Documento</label>
+        <input id="df-docnumber" pInputText type="text" [value]="documentNumber()" disabled placeholder="Auto-completado" />
+      </div>
+
+      <div class="df-field">
+        <label for="df-role">Rol Legal</label>
+        <p-select
+          inputId="df-role"
+          [(ngModel)]="legalRole"
+          [options]="legalRoleOptions"
+          optionLabel="label"
+          optionValue="value"
+          appendTo="body" />
+      </div>
+
+      <div class="df-field">
+        <label for="df-state">Estado</label>
+        <p-select
+          inputId="df-state"
+          [(ngModel)]="state"
+          [options]="stateOptions"
+          optionLabel="label"
+          optionValue="value"
+          appendTo="body" />
+      </div>
+
+      <div class="df-field">
+        <label for="df-phone">Teléfono</label>
+        <input id="df-phone" pInputText type="text" [(ngModel)]="phone" placeholder="987654321" />
+      </div>
+
+      <div class="df-field">
+        <label for="df-email">Correo</label>
+        <input id="df-email" pInputText type="email" [(ngModel)]="email" placeholder="correo@ejemplo.com" />
+      </div>
+
+      <div class="df-field df-span-2">
+        <label for="df-address">Dirección</label>
+        <input id="df-address" pInputText type="text" [(ngModel)]="address" placeholder="Av. Ejemplo 123, Lima" />
+      </div>
+
+      <div class="df-field">
+        <label for="df-refund-template">Plantilla Reembolso</label>
+        <p-select
+          inputId="df-refund-template"
+          [(ngModel)]="refundTemplate"
+          [options]="refundTemplateOptions()"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar"
+          [disabled]="!selectedClient()"
+          appendTo="body" />
+      </div>
+
+      <div class="df-field">
+        <label for="df-file-model">Modelo Archivo</label>
+        <p-select
+          inputId="df-file-model"
+          [(ngModel)]="fileModel"
+          [options]="fileModelOptions()"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar"
+          [disabled]="!selectedClient()"
+          appendTo="body" />
+      </div>
+    </div>
+  </div>
+
+  <footer class="df-footer">
+    <button class="df-secondary" type="button" (click)="close()">Cancelar</button>
+    <button class="df-primary" type="button" [disabled]="!canSave" (click)="save()">Guardar</button>
+  </footer>
+</section>

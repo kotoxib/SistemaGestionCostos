@@ -1,0 +1,402 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f6f7fb;
+  color: #1f2937;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.dashboard-page {
+  min-height: 100vh;
+  padding: 11px 21px 24px 11px;
+  background: #f6f7fb;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  color: #202938;
+  font-size: 24px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+
+.dashboard-header p {
+  margin: 6px 0 0;
+  color: #667085;
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.filters-row {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(160px, 220px)) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.clear-filters {
+  border: 0;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  justify-self: start;
+}
+
+.clear-filters:hover {
+  color: var(--orange);
+  background: var(--orangeSoft);
+}
+
+:host ::ng-deep .filters-row .p-select {
+  min-height: 40px;
+  border-color: #d8dee8;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.kpi-grid {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.kpi-card {
+  height: 110px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid #dbe2ea;
+  border-radius: 15px;
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.04),
+    0 8px 16px rgba(16, 24, 40, 0.08);
+}
+
+.kpi-label {
+  color: #657084;
+  font-size: 11.5px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-weight: 500;
+}
+
+.kpi-value {
+  margin-top: 8px;
+  font-size: 28px;
+  line-height: 0.95;
+  font-weight: 850;
+  letter-spacing: -1px;
+}
+
+.kpi-detail {
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.kpi-dark {
+  color: #202938;
+}
+
+.kpi-orange {
+  color: #f47920;
+}
+
+.kpi-red {
+  color: #ef4444;
+}
+
+.detail-green {
+  color: #22c55e;
+}
+
+.detail-blue {
+  color: #38bdf8;
+}
+
+.detail-orange {
+  color: #f47920;
+}
+
+.detail-red {
+  color: #ef4444;
+}
+
+.charts-grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.chart-card-wide {
+  grid-column: 1 / -1;
+}
+
+.panel-card {
+  background: #ffffff;
+  border: 1px solid #dbe2ea;
+  border-radius: 14px;
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.035),
+    0 8px 15px rgba(16, 24, 40, 0.06);
+}
+
+.chart-card {
+  padding: 20px 18px;
+}
+
+.panel-header h2 {
+  margin: 0 0 14px;
+  color: #111827;
+  font-size: 13.5px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+}
+
+.vs-panel-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.axis-label {
+  margin: 0 0 14px;
+  color: #9ca3af;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.chart-legend-top {
+  margin-top: -6px;
+  margin-bottom: 10px;
+}
+
+.dot-hollow {
+  background: #ffffff;
+  border: 2px solid var(--dot-color, #9ca3af);
+}
+
+.doughnut-box {
+  position: relative;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doughnut-center {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.doughnut-center strong {
+  color: #1f2937;
+  font-size: 24px;
+  font-weight: 800;
+  font-family: var(--font-display);
+}
+
+.doughnut-center span {
+  margin-top: 2px;
+  color: #9ca3af;
+  font-size: 11px;
+}
+
+.chart-box {
+  height: 340px;
+}
+
+.chart-legend {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.dot-dark {
+  background: #4b5563;
+}
+
+.dot-orange {
+  background: #f47920;
+}
+
+.dot-green {
+  background: #22c55e;
+}
+
+.dot-sky {
+  background: #38bdf8;
+}
+
+.dot-purple {
+  background: #8b5cf6;
+}
+
+.dot-red {
+  background: #ef4444;
+}
+
+.progress-list {
+  padding-top: 4px;
+}
+
+.progress-row + .progress-row {
+  margin-top: 18px;
+}
+
+.progress-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.progress-row-head strong {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.text-amber {
+  color: #f59e0b;
+}
+
+.text-orange {
+  color: #f47920;
+}
+
+.text-green {
+  color: #22c55e;
+}
+
+.progress-track {
+  margin-top: 8px;
+  height: 18px;
+  border-radius: 9px;
+  background: #f3f4f6;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  min-width: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+}
+
+.progress-fill span {
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.fill-amber {
+  background: #f59e0b;
+}
+
+.fill-orange {
+  background: #f47920;
+}
+
+.fill-green {
+  background: #22c55e;
+}
+
+.progress-total {
+  margin-top: 20px;
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #e5e7eb;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.progress-total strong {
+  color: #1f2937;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.progress-period {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+@media (max-width: 1280px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filters-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding: 14px;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+  }
+
+  .filters-row {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}

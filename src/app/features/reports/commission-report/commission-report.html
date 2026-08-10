@@ -1,0 +1,119 @@
+<section class="cr-page">
+  <div class="page-header">
+    <div>
+      <h1>Reporte de Comisiones</h1>
+      <p>Consolidado de comisiones por proceso</p>
+    </div>
+
+    <button class="secondary-action" type="button" (click)="exportReport()">
+      <i class="pi pi-download" aria-hidden="true"></i>
+      <span>Exportar</span>
+    </button>
+  </div>
+
+  <section class="kpi-grid">
+    <article class="kpi-card">
+      <span class="kpi-label">Casos Comisionables</span>
+      <strong class="kpi-value kpi-dark">{{ kpis.totalCases }}</strong>
+      <span class="kpi-detail">Con los filtros aplicados</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Comisión Total</span>
+      <strong class="kpi-value kpi-dark">S/ {{ kpis.totalCommission | number: '1.2-2' }}</strong>
+      <span class="kpi-detail">Todos los casos comisionables</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Total Adelantado</span>
+      <strong class="kpi-value kpi-orange">S/ {{ kpis.totalAdvances | number: '1.2-2' }}</strong>
+      <span class="kpi-detail">Adelantos y pagos registrados</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Saldo Pendiente</span>
+      <strong class="kpi-value" [class.kpi-dark]="kpis.totalBalance > 0" [class.kpi-green]="kpis.totalBalance === 0">
+        S/ {{ kpis.totalBalance | number: '1.2-2' }}
+      </strong>
+      <span class="kpi-detail">Por pagar a los abogados</span>
+    </article>
+  </section>
+
+  <div class="filters-row">
+    <label class="search-box">
+      <i class="pi pi-search" aria-hidden="true"></i>
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por N° de Caso o Cliente…" />
+    </label>
+
+    <p-select
+      [(ngModel)]="selectedAttorney"
+      [options]="attorneyOptions()"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Abogado"
+      [showClear]="true" />
+
+    <p-select
+      [(ngModel)]="selectedState"
+      [options]="stateOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Estado"
+      [showClear]="true" />
+
+    @if (searchTerm || selectedState || selectedAttorney) {
+      <button class="clear-filters" type="button" (click)="clearFilters()">Limpiar</button>
+    }
+  </div>
+
+  <div class="table-card">
+    <p-table
+      #dt
+      [value]="filteredCommissions"
+      [columns]="exportColumns"
+      [exportFilename]="'reporte-comisiones'"
+      [loading]="loading()"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [tableStyle]="{ 'min-width': '860px' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>N° CASO</th>
+          <th>CLIENTE</th>
+          <th>ABOGADO</th>
+          <th class="txt-right">COMISIÓN TOTAL</th>
+          <th class="txt-right">ADELANTOS</th>
+          <th class="txt-right">SALDO</th>
+          <th class="txt-center">ESTADO</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td class="mono">{{ row.caseNumber }}</td>
+          <td class="cell-bold">{{ row.clientName }}</td>
+          <td>{{ row.responsibleAttorney }}</td>
+          <td class="txt-right cell-bold">S/ {{ row.commissionAmount | number: '1.2-2' }}</td>
+          <td class="txt-right text-orange">S/ {{ row.advancesTotal | number: '1.2-2' }}</td>
+          <td class="txt-right cell-bold" [class.text-green]="row.commissionBalance === 0">
+            S/ {{ row.commissionBalance | number: '1.2-2' }}
+          </td>
+          <td class="txt-center">
+            <span class="badge" [ngClass]="stateBadgeClass(row.state)">{{ row.state }}</span>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="empty-table">No se encontraron comisiones con los filtros aplicados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>

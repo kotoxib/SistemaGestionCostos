@@ -1,0 +1,123 @@
+<section class="ac-page">
+  <div class="page-header">
+    <div>
+      <h1>Gestión de Comisiones</h1>
+      <p>Comisiones de abogados calculadas sobre la utilidad neta de cada proceso comisionable</p>
+    </div>
+  </div>
+
+  <div class="filters-row">
+    <label class="search-box">
+      <i class="pi pi-search" aria-hidden="true"></i>
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por Abogado, N° Caso o Cliente…" />
+    </label>
+
+    <p-select
+      [(ngModel)]="selectedAttorney"
+      [options]="attorneyOptions()"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Abogado"
+      [showClear]="true" />
+
+    <p-select [(ngModel)]="selectedYear" [options]="years" placeholder="Año" />
+
+    <p-datepicker [(ngModel)]="dateFrom" placeholder="Desde" dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body" />
+    <p-datepicker [(ngModel)]="dateTo" placeholder="Hasta" dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body" />
+
+    <p-select
+      [(ngModel)]="selectedState"
+      [options]="stateOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Estado"
+      [showClear]="true" />
+
+    @if (searchTerm || dateFrom || dateTo || selectedState || selectedAttorney) {
+      <button class="clear-filters" type="button" (click)="clearFilters()">Limpiar</button>
+    }
+  </div>
+
+  <div class="table-card">
+    <p-table
+      [value]="filteredProcesses"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [tableStyle]="{ 'min-width': '1280px' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>N° CASO</th>
+          <th>CLIENTE</th>
+          <th>ABOGADO RESPONSABLE</th>
+          <th class="txt-right">MONTO CASO</th>
+          <th class="txt-center">% COBRADO</th>
+          <th class="txt-right">UTILIDAD</th>
+          <th class="txt-center">% COM.</th>
+          <th class="txt-right">MONTO COM.</th>
+          <th class="txt-right">ADELANTOS</th>
+          <th class="txt-right">SALDO</th>
+          <th class="txt-center">ESTADO</th>
+          <th class="txt-center">ACCIÓN</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-caseRow>
+        <tr>
+          <td class="mono">{{ caseRow.caseNumber }}</td>
+          <td class="cell-bold">{{ caseRow.clientName }}</td>
+          <td>
+            <button class="attorney-link" type="button" (click)="viewAttorneyHistory(caseRow.responsibleAttorney)">
+              {{ caseRow.responsibleAttorney }}
+            </button>
+          </td>
+          <td class="txt-right">S/ {{ caseRow.caseAmount | number: '1.2-2' }}</td>
+          <td class="txt-center">{{ caseRow.paidPercentage }}%</td>
+          <td class="txt-right">
+            <div class="profit-cell">
+              <span class="cell-bold">S/ {{ caseRow.profit | number: '1.2-2' }}</span>
+              <span class="badge badge-sm" [ngClass]="profitBadge(caseRow.profitType)">{{ caseRow.profitType }}</span>
+            </div>
+          </td>
+          <td class="txt-center">{{ caseRow.commissionPercentage }}%</td>
+          <td class="txt-right cell-bold">S/ {{ caseRow.commissionAmount | number: '1.2-2' }}</td>
+          <td class="txt-right text-orange">S/ {{ caseRow.advancesTotal | number: '1.2-2' }}</td>
+          <td class="txt-right cell-bold" [class.text-green]="caseRow.commissionBalance === 0">
+            S/ {{ caseRow.commissionBalance | number: '1.2-2' }}
+          </td>
+          <td class="txt-center">
+            <span class="badge" [ngClass]="caseStateBadge(caseRow.state)">{{ caseRow.state }}</span>
+          </td>
+          <td class="txt-center">
+            <div class="row-actions">
+              <button
+                class="btn-icon btn-view"
+                [disabled]="caseRow.commissionBalance === 0"
+                title="Pago"
+                (click)="openPaymentDialog(caseRow)">
+                <i class="pi pi-money-bill"></i>
+              </button>
+              <button
+                class="btn-icon btn-more"
+                [disabled]="caseRow.advances.length === 0"
+                title="Ver historial de pagos"
+                (click)="viewCaseHistory(caseRow)">
+                <i class="pi pi-history"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="12" class="empty-table">No se encontraron registros con los filtros aplicados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>

@@ -1,0 +1,88 @@
+<div class="apps-shell" [class.sidebar-collapsed]="!sidebarOpen()">
+  @if (sidebarOpen()) {
+    <button
+      class="sidebar-backdrop"
+      type="button"
+      (click)="closeSidebar()"
+      aria-label="Cerrar menú lateral">
+    </button>
+  }
+
+  <aside class="apps-sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-left">
+        <div class="brand-mark">
+          <i class="pi pi-wallet" aria-hidden="true"></i>
+        </div>
+
+        <strong class="brand-code">{{ system().shortTitle }}</strong>
+      </div>
+
+      <button
+        class="sidebar-close"
+        type="button"
+        (click)="closeSidebar()"
+        aria-label="Cerrar sidebar">
+        <i class="pi pi-times" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegación secundaria">
+      @for (item of sidebarItems(); track item.route) {
+        <a
+          class="sidebar-link"
+          [class.active]="isSidebarItemActive(item.route)"
+          [routerLink]="item.route"
+          [attr.title]="item.label"
+          (click)="closeSidebarOnMobile()">
+          <i [class]="item.icon" aria-hidden="true"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+  </aside>
+
+  <div class="apps-content">
+    <header class="apps-header">
+      <div class="header-left">
+        <button
+          class="sidebar-toggle"
+          type="button"
+          (click)="toggleSidebar()"
+          aria-label="Abrir o cerrar sidebar">
+          <i class="pi pi-bars" aria-hidden="true"></i>
+        </button>
+
+        <nav class="header-menu" aria-label="Navegación principal">
+          @for (menu of system().menus; track menu.key) {
+            <a
+              class="header-menu-link"
+              [class.active]="isHeaderMenuActive(menu)"
+              [routerLink]="menu.route">
+              {{ menu.label }}
+            </a>
+          }
+        </nav>
+      </div>
+
+      <div class="header-right">
+        <button class="notification-button" type="button" aria-label="Notificaciones">
+          <i class="pi pi-bell" aria-hidden="true"></i>
+        </button>
+
+        <div class="user-greeting">
+          Hola, <strong>{{ displayName() || 'Usuario' }}</strong>
+        </div>
+
+        <button class="logout-button" type="button" (click)="logout()">
+          <i class="pi pi-sign-out" aria-hidden="true"></i>
+          <span>Cerrar sesión</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="apps-main">
+      <router-outlet />
+    </main>
+  </div>
+</div>

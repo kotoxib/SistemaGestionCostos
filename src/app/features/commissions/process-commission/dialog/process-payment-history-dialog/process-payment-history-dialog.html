@@ -1,0 +1,52 @@
+<section class="ch-shell">
+  <header class="ch-header">
+    <div>
+      <h2>Historial de Pagos del Caso</h2>
+      <p>{{ caseRow.caseNumber }} · {{ caseRow.clientName }}</p>
+    </div>
+
+    <button class="ch-close" type="button" (click)="close()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="ch-body">
+    <p-table [value]="advances" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '560px' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>FECHA</th>
+          <th>ID PAGO</th>
+          <th class="txt-center">TIPO</th>
+          <th class="txt-right">MONTO</th>
+          <th>COMENTARIOS</th>
+          <th class="txt-center">ESTADO</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-entry>
+        <tr>
+          <td class="text-muted">{{ entry.date }}</td>
+          <td class="mono text-muted">{{ entry.id }}</td>
+          <td class="txt-center">
+            <span class="badge" [ngClass]="typeBadge(entry.type)">{{ typeLabel(entry.type) }}</span>
+          </td>
+          <td class="txt-right cell-bold">S/ {{ entry.amount | number: '1.2-2' }}</td>
+          <td class="text-muted truncate" [title]="entry.comment ?? ''">{{ entry.comment ?? '—' }}</td>
+          <td class="txt-center">
+            <span class="badge" [ngClass]="stateBadge(entry.state)">{{ entry.state }}</span>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="empty-table">Este caso no tiene pagos registrados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <footer class="ch-footer">
+    <button class="ch-secondary" type="button" (click)="close()">Cerrar</button>
+  </footer>
+</section>

@@ -1,0 +1,128 @@
+<section class="rp-page">
+  <div class="page-header">
+    <div>
+      <h1>Reporte de Solicitudes de Gasto</h1>
+      <p>Consolidado de solicitudes de arancel judicial y administrativo</p>
+    </div>
+
+    <button class="secondary-action" type="button" (click)="exportReport(dt)">
+      <i class="pi pi-download" aria-hidden="true"></i>
+      <span>Exportar</span>
+    </button>
+  </div>
+
+  <section class="kpi-grid">
+    <article class="kpi-card">
+      <span class="kpi-label">Total de Gastos</span>
+      <strong class="kpi-value kpi-dark">{{ kpis().totalCount }}</strong>
+      <span class="kpi-detail">Solicitudes registradas</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Monto Total</span>
+      <strong class="kpi-value kpi-dark">S/ {{ kpis().totalAmount | number: '1.2-2' }}</strong>
+      <span class="kpi-detail">Suma de todas las solicitudes</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Total Reembolsado</span>
+      <strong class="kpi-value kpi-purple">S/ {{ kpis().refundedAmount | number: '1.2-2' }}</strong>
+      <span class="kpi-detail">Solicitudes en estado Reembolsado</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Pendientes de Pago</span>
+      <strong class="kpi-value kpi-orange">{{ kpis().pendingCount }}</strong>
+      <span class="kpi-detail">Solicitudes en estado Registrado</span>
+    </article>
+  </section>
+
+  <div class="filters-row">
+    <label class="search-box">
+      <i class="pi pi-search" aria-hidden="true"></i>
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por Código, N° de Caso, Concepto…" />
+    </label>
+
+    <p-select
+      [(ngModel)]="selectedClient"
+      [options]="clientOptions()"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Cliente"
+      [showClear]="true" />
+
+    <p-select
+      [(ngModel)]="selectedExpenseType"
+      [options]="expenseTypeOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Tipo de Gasto"
+      [showClear]="true" />
+
+    <p-select
+      [(ngModel)]="selectedState"
+      [options]="stateOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Estado"
+      [showClear]="true" />
+
+    <p-datepicker [(ngModel)]="dateFrom" placeholder="Desde" dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body" />
+    <p-datepicker [(ngModel)]="dateTo" placeholder="Hasta" dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body" />
+
+    @if (searchTerm || selectedClient || selectedExpenseType || selectedState || dateFrom || dateTo) {
+      <button class="clear-filters" type="button" (click)="clearFilters()">Limpiar</button>
+    }
+  </div>
+
+  <div class="table-card">
+    <p-table
+      #dt
+      [value]="filteredFees"
+      [columns]="exportColumns"
+      [exportFilename]="'reporte-solicitudes-gasto'"
+      [loading]="loading()"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [tableStyle]="{ 'min-width': '1080px' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>CÓDIGO</th>
+          <th>FECHA</th>
+          <th>CLIENTE</th>
+          <th>N° DE CASO</th>
+          <th>TIPO DE GASTO</th>
+          <th>NOMBRE DEL GASTO</th>
+          <th class="txt-right">IMPORTE S/</th>
+          <th class="txt-center">ESTADO</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td class="rp-code">{{ row.code }}</td>
+          <td class="text-muted">{{ row.date | date: 'dd/MM/yyyy' }}</td>
+          <td class="cell-bold">{{ row.clientName }}</td>
+          <td class="cell-bold">{{ row.caseNumber }}</td>
+          <td><span class="badge" [ngClass]="expenseTypeBadgeClass(row.expenseType)">{{ row.expenseType }}</span></td>
+          <td>{{ row.expenseName }}</td>
+          <td class="txt-right cell-bold">S/ {{ row.amount | number: '1.2-2' }}</td>
+          <td class="txt-center">
+            <span class="badge" [ngClass]="stateBadgeClass(row.state)">{{ row.state }}</span>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8" class="empty-table">No se encontraron aranceles con los filtros aplicados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>

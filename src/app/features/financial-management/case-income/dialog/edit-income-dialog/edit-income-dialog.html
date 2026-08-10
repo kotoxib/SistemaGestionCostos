@@ -1,0 +1,182 @@
+<section class="ei-shell">
+  <header class="ei-header">
+    <div>
+      <h2>Editar Ingreso – {{ income.incomeNumber }}</h2>
+      <p>Consulta los datos del ingreso y registra nuevos pagos</p>
+    </div>
+
+    <button class="ei-close" type="button" (click)="close()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="ei-body">
+    <div class="ei-grid">
+      <div class="ei-field">
+        <label for="ei-case">Nro. Caso</label>
+        <input id="ei-case" pInputText type="text" [value]="income.caseNumber" readonly />
+      </div>
+      <div class="ei-field">
+        <label for="ei-amount">Monto Total del Caso</label>
+        <p-inputnumber
+          inputId="ei-amount"
+          [(ngModel)]="caseAmount"
+          mode="decimal"
+          locale="en-US"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [min]="0"
+          prefix="S/ " />
+      </div>
+      <div class="ei-field">
+        <label for="ei-currency">Moneda</label>
+        <input id="ei-currency" pInputText type="text" [value]="income.currency" readonly />
+      </div>
+      <div class="ei-field">
+        <label for="ei-client">Cliente</label>
+        <input id="ei-client" pInputText type="text" [value]="income.clientName" readonly />
+      </div>
+      <div class="ei-field">
+        <label for="ei-responsible">Responsable</label>
+        <input id="ei-responsible" pInputText type="text" [value]="income.responsible" readonly />
+      </div>
+      <div class="ei-field">
+        <label for="ei-state">Estado</label>
+        <input
+          id="ei-state"
+          pInputText
+          type="text"
+          [value]="paidPercentage() >= 100 ? 'Pagado' : paidAmount() > 0 ? 'En proceso' : 'Sin pagos'"
+          readonly />
+      </div>
+    </div>
+
+    <p class="ei-section-title ei-mt">Pagos Registrados</p>
+
+    <div class="ei-payments-summary">
+      <div class="ei-field">
+        <label for="ei-paid">Monto Pagado</label>
+        <input id="ei-paid" pInputText type="text" [value]="'S/ ' + (paidAmount() | number: '1.2-2')" readonly />
+      </div>
+      <div class="ei-field">
+        <label for="ei-balance">Saldo Pendiente</label>
+        <input id="ei-balance" pInputText type="text" [value]="'S/ ' + (balance() | number: '1.2-2')" readonly />
+      </div>
+      <div class="ei-field">
+        <label for="ei-percentage">% Cobrado</label>
+        <input id="ei-percentage" pInputText type="text" [value]="paidPercentage() + '%'" readonly />
+      </div>
+
+      @if (!showPaymentForm()) {
+        <button class="ei-add-payment" type="button" (click)="openPaymentForm()">
+          <i class="pi pi-plus" aria-hidden="true"></i>
+          Agregar Pago
+        </button>
+      }
+    </div>
+
+    @if (showPaymentForm()) {
+      <div class="ei-payment-form">
+        <div class="ei-grid ei-grid-4">
+          <div class="ei-field">
+            <label for="ei-pay-date">Fecha del Pago <strong>*</strong></label>
+            <p-datepicker
+              inputId="ei-pay-date"
+              [(ngModel)]="paymentDate"
+              dateFormat="dd/mm/yy"
+              [showIcon]="true"
+              appendTo="body" />
+          </div>
+
+          <div class="ei-field">
+            <label for="ei-pay-amount">Monto <strong>*</strong></label>
+            <p-inputnumber
+              inputId="ei-pay-amount"
+              [(ngModel)]="paymentAmount"
+              mode="decimal"
+              locale="en-US"
+              [minFractionDigits]="2"
+              [maxFractionDigits]="2"
+              placeholder="0.00" />
+          </div>
+
+          <div class="ei-field">
+            <label for="ei-pay-method">Medio de Pago <strong>*</strong></label>
+            <p-select
+              inputId="ei-pay-method"
+              [(ngModel)]="paymentMethod"
+              [options]="paymentMethods"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Seleccionar..." />
+          </div>
+
+          <div class="ei-field">
+            <label for="ei-pay-document">Nro. de Documento</label>
+            <input
+              id="ei-pay-document"
+              pInputText
+              type="text"
+              [(ngModel)]="paymentDocument"
+              placeholder="Boleta / Factura / Recibo" />
+          </div>
+
+          <div class="ei-field ei-span-4">
+            <label for="ei-pay-observation">Observaciones</label>
+            <textarea
+              id="ei-pay-observation"
+              pTextarea
+              rows="2"
+              [(ngModel)]="paymentObservation"
+              placeholder="Notas adicionales (opcional)"></textarea>
+          </div>
+        </div>
+
+        <div class="ei-dropzone">
+          <i class="pi pi-upload" aria-hidden="true"></i>
+          <p>{{ paymentAttachment() ?? 'Adjuntar comprobante' }}</p>
+          <button type="button" class="ei-attach-button" (click)="attachPaymentFile()">Seleccionar archivo</button>
+        </div>
+
+        <div class="ei-payment-form-actions">
+          <button class="ei-secondary" type="button" (click)="cancelPaymentForm()">Cancelar</button>
+          <button class="ei-primary" type="button" [disabled]="!canSavePayment" (click)="savePayment()">
+            Guardar Pago
+          </button>
+        </div>
+      </div>
+    }
+
+    <table class="ei-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Monto</th>
+          <th>Medio de Pago</th>
+          <th>Usuario</th>
+          <th>Documento</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (payment of payments(); track payment.id) {
+          <tr>
+            <td>{{ payment.date }}</td>
+            <td class="ei-green ei-bold">S/ {{ payment.amount | number: '1.2-2' }}</td>
+            <td>{{ payment.paymentMethod }}</td>
+            <td class="ei-muted">{{ payment.user }}</td>
+            <td class="ei-mono">{{ payment.documentNumber ?? '—' }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="ei-empty">Sin pagos registrados</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="ei-footer">
+    <button class="ei-secondary" type="button" (click)="close()">Cancelar</button>
+    <button class="ei-primary" type="button" (click)="save()">Aceptar</button>
+  </footer>
+</section>

@@ -1,0 +1,97 @@
+<section class="bu-shell">
+  <header class="bu-header">
+    <div>
+      <h2>Carga de Solicitudes de Aranceles</h2>
+      <p>Carga masiva de solicitudes de aranceles desde Excel</p>
+    </div>
+
+    <button class="bu-close" type="button" (click)="cancel()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="bu-body">
+    <div
+      class="bu-dropzone"
+      [class.drag-over]="isDragOver()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)">
+      <input #fileInput type="file" accept=".xlsx,.xls" class="bu-file-input" (change)="onFileSelected($event)" />
+
+      <i class="pi pi-upload" aria-hidden="true"></i>
+      <p>Arrastra y suelta tu archivo aquí o</p>
+
+      <button class="bu-template-button" type="button" (click)="openFilePicker()">
+        Buscar archivo
+      </button>
+
+      @if (selectedFileName()) {
+        <span class="bu-selected-file">
+          <i class="pi pi-file-excel" aria-hidden="true"></i>
+          {{ selectedFileName() }}
+        </span>
+      }
+
+      @if (fileError()) {
+        <span class="bu-file-error">{{ fileError() }}</span>
+      }
+    </div>
+
+    <div class="bu-preview-card">
+      <p-table [value]="previewRows()" [tableStyle]="{ 'min-width': '1080px' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Código de Solicitud</th>
+            <th>Banco</th>
+            <th>N° de Caso</th>
+            <th>N° de Expediente</th>
+            <th>Concepto</th>
+            <th>Juzgado</th>
+            <th class="txt-right">Importe S/</th>
+            <th>Solicitante</th>
+            <th>Observación</th>
+            <th class="txt-center">Reembolsable</th>
+            <th>Fecha</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td class="bu-code">{{ row.code }}</td>
+            <td>{{ row.bank }}</td>
+            <td>{{ row.caseNumber }}</td>
+            <td class="text-muted">{{ row.fileNumber }}</td>
+            <td>{{ row.concept }}</td>
+            <td class="text-muted">{{ row.court }}</td>
+            <td class="txt-right cell-bold">S/ {{ row.amount | number: '1.2-2' }}</td>
+            <td>{{ row.requester }}</td>
+            <td class="text-muted">{{ row.observation }}</td>
+            <td class="txt-center">
+              <span class="badge" [ngClass]="row.isRefundable === 'Sí' ? 'badge-active' : 'badge-inactive'">
+                {{ row.isRefundable }}
+              </span>
+            </td>
+            <td class="text-muted">{{ row.date }}</td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="11" class="bu-empty">
+              Sin datos cargados. Sube un archivo Excel para previsualizar los registros.
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <footer class="bu-footer">
+    <button class="bu-cancel" type="button" (click)="cancel()">Cancelar</button>
+    <button class="bu-upload" type="button" (click)="upload()">
+      <i class="pi pi-upload" aria-hidden="true"></i>
+      <span>Cargar</span>
+    </button>
+  </footer>
+</section>

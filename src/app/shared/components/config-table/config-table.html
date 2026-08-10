@@ -1,0 +1,109 @@
+<div class="config-table-card">
+  <p-table
+    [value]="rows"
+    [loading]="loading"
+    [paginator]="paginator"
+    [lazy]="lazy"
+    [rows]="rowsPerPage"
+    [first]="first"
+    [totalRecords]="resolvedTotalRecords"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [sortField]="sortField"
+    [sortOrder]="sortOrder"
+    [responsiveLayout]="'scroll'"
+    [styleClass]="'config-p-table ' + tableStyleClass"
+    paginatorDropdownAppendTo="body"
+    (onLazyLoad)="onLazyLoad($event)"
+  >
+    <ng-template #header>
+      <tr>
+        @for (column of columns; track column.field) {
+          <th
+            [class]="getHeaderClass(column)"
+            [style.width]="column.width"
+            [style.min-width]="column.minWidth"
+          >
+            {{ column.header }}
+          </th>
+        }
+
+        @if (hasActions) {
+          <th
+            [class]="'config-table-th ' + actionColumnClass"
+            [style.width]="actionColumnWidth"
+          >
+            {{ actionHeader }}
+          </th>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-row let-rowIndex="rowIndex">
+      <tr>
+        @for (column of columns; track column.field) {
+          <td
+            [class]="getCellClass(row, column, rowIndex)"
+            [style.width]="column.width"
+            [style.min-width]="column.minWidth"
+          >
+            <span
+              class="config-cell-wrap"
+              [pTooltip]="getTooltip(row, column, rowIndex)"
+              [tooltipDisabled]="!column.tooltip || !getTooltip(row, column, rowIndex)"
+              [tooltipPosition]="getTooltipPosition(column)"
+              appendTo="body"
+            >
+              @if (column.type === 'badge') {
+                <span [class]="getBadgeClass(row, column, rowIndex)">
+                  {{ getBadgeLabel(row, column, rowIndex) }}
+                </span>
+              } @else {
+                <span>
+                  {{ getDisplayValue(row, column, rowIndex) }}
+                </span>
+              }
+            </span>
+          </td>
+        }
+
+        @if (hasActions) {
+          <td class="config-table-td txt-center">
+            <div class="config-table-actions">
+              @for (action of actions; track action.key) {
+                @if (isActionVisible(action, row, rowIndex)) {
+                  <button
+                    type="button"
+                    [class]="getActionClass(action)"
+                    [disabled]="isActionDisabled(action, row, rowIndex)"
+                    [attr.aria-label]="action.ariaLabel || getActionTooltip(action, row, rowIndex)"
+                    [pTooltip]="getActionTooltip(action, row, rowIndex)"
+                    [tooltipDisabled]="!action.tooltip || !getActionTooltip(action, row, rowIndex)"
+                    [tooltipPosition]="getActionTooltipPosition(action)"
+                    appendTo="body"
+                    (click)="handleActionClick($event, action, row, rowIndex)"
+                  >
+                    @if (action.iconType === 'material') {
+                      <span class="material-symbols-outlined table-material-icon">
+                        {{ action.icon }}
+                      </span>
+                    } @else {
+                      <i [class]="action.icon"></i>
+                    }
+                  </button>
+                }
+              }
+            </div>
+          </td>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td [attr.colspan]="totalColumns" class="empty-table">
+          {{ emptyMessage }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

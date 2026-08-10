@@ -1,0 +1,103 @@
+<section class="rd-shell">
+  <header class="rd-header">
+    <div>
+      <h2>{{ isEdit ? 'Editar Reembolso' : 'Crear Reembolso' }}</h2>
+      <p>
+        {{ isEdit
+          ? 'Modifique los gastos del reembolso. El caso no puede cambiarse.'
+          : 'Seleccione el caso y los gastos reembolsables a incluir' }}
+      </p>
+    </div>
+
+    <button class="rd-close" type="button" (click)="close()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="rd-body">
+    <div class="rd-info-grid">
+      <div class="rd-field">
+        <label for="rd-case">N° de Caso</label>
+        @if (isEdit) {
+          <input id="rd-case" pInputText type="text" [value]="selectedCaseNumber()" disabled />
+        } @else {
+          <p-select
+            inputId="rd-case"
+            [ngModel]="selectedCaseNumber()"
+            (ngModelChange)="onCaseChange($event)"
+            [options]="caseOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Seleccionar caso"
+            appendTo="body" />
+        }
+      </div>
+      <div class="rd-field">
+        <label>Cliente</label>
+        <input pInputText type="text" [value]="clientName() || '—'" disabled />
+      </div>
+      <div class="rd-field">
+        <label>Demandado</label>
+        <input pInputText type="text" [value]="demandado()?.fullName ?? '—'" disabled />
+      </div>
+      <div class="rd-field">
+        <label>Plantilla de Reembolso</label>
+        <input pInputText type="text" [value]="demandado()?.refundTemplate || '—'" disabled />
+      </div>
+    </div>
+
+    <p class="rd-section-title">Gastos elegibles para reembolso</p>
+
+    @if (!selectedCaseNumber()) {
+      <p class="rd-hint">→ seleccione un caso para ver sus gastos reembolsables</p>
+    } @else {
+      <div class="rd-table-card">
+        <table class="rd-table">
+          <thead>
+            <tr>
+              <th class="rd-check-col">
+                <input type="checkbox" [checked]="allSelected()" (change)="toggleAll()" />
+              </th>
+              <th>Cód. Solicitud</th>
+              <th>Demandado</th>
+              <th>N° Expediente</th>
+              <th>Concepto</th>
+              <th class="txt-right">Importe S/</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (expense of availableExpenses(); track expense.id) {
+              <tr>
+                <td class="rd-check-col">
+                  <input
+                    type="checkbox"
+                    [checked]="selectedIds().includes(expense.id)"
+                    (change)="toggleExpense(expense.id)" />
+                </td>
+                <td class="rd-code">{{ expense.requestCode }}</td>
+                <td>{{ expense.defendant }}</td>
+                <td class="text-muted">{{ expense.fileNumber }}</td>
+                <td>{{ expense.concept }}</td>
+                <td class="txt-right cell-bold">S/ {{ expense.amount | number: '1.2-2' }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="rd-empty">No hay gastos reembolsables registrados para este caso.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rd-total">
+        <span>Monto total del reembolso</span>
+        <strong>S/ {{ total() | number: '1.2-2' }}</strong>
+      </div>
+    }
+  </div>
+
+  <footer class="rd-footer">
+    <button class="rd-secondary" type="button" (click)="close()">Cancelar</button>
+    <button class="rd-primary" type="button" [disabled]="!canSave" (click)="save()">Guardar</button>
+  </footer>
+</section>

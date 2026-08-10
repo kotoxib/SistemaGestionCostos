@@ -1,0 +1,185 @@
+/* ========== SHADOW ========== */
+.shadow {
+  box-shadow: var(--shadow);
+}
+
+/* ========== FLEXBOX ========== */
+.fbox,
+.fbox-c,
+.fbox-v,
+.fbox-vc,
+.fbox-bw{
+  display: flex;
+}
+
+.fbox-c,
+.cen,
+.fbox-vc {
+  justify-content: center;
+  align-items: center;
+}
+
+.jccen {
+  justify-content: flex-end;
+}
+
+.alcen {
+  align-items: center;
+}
+
+.alstart {
+  align-items: flex-start;
+}
+
+.alend {
+  align-items: flex-end;
+}
+
+.fbox-bw {
+  justify-content: space-between;
+}
+
+.txt-cen {
+  text-align: center;
+}
+
+.fbox-v,
+.fbox-vc {
+  flex-direction: column;
+}
+
+.gbox {
+  display: grid;
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+.noWrap {
+  white-space: nowrap;
+}
+
+.fwrap {
+  flex-wrap: wrap;
+}
+
+.selfcen {
+  align-self: center;
+}
+
+.selfend {
+  align-self: flex-end;
+}
+
+.fgrow {
+  flex-grow: 1;
+}
+
+/* ========== DIMENSIONES ========== */
+.fbas50 {
+  flex-basis: 50%;
+}
+
+.fbas100 {
+  flex-basis: 100%;
+}
+
+.w100 {
+  width: 100%;
+
+  input {
+    width: 100%;
+  }
+}
+
+.h100 {
+  height: 100%;
+}
+
+/* ========== GAPS ========== */
+.gap5 {
+  gap: 5px;
+}
+
+.gap10 {
+  gap: 10px;
+}
+
+.gap15 {
+  gap: 15px;
+}
+
+.gap20 {
+  gap: 20px;
+}
+
+.gap30 {
+  gap: 30px;
+}
+
+.gap40 {
+  gap: 40px;
+}
+
+/* ========== MARGENES ========== */
+.mr10 {
+  margin-right: 10px;
+}
+
+.mr12 {
+  margin-right: 12px;
+}
+
+.mr15 {
+  margin-right: 15px;
+}
+
+.mr20 {
+  margin-right: 20px;
+}
+
+.mr30 {
+  margin-right: 30px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.mb15 {
+  margin-bottom: 15px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.mb25 {
+  margin-bottom: 25px;
+}
+
+.mb30 {
+  margin-bottom: 30px;
+}
+
+.mb35 {
+  margin-bottom: 35px;
+}
+
+.mt10 {
+  margin-top: 10px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.mt30 {
+  margin-top: 30px;
+}
+
+/* ========== POSICIONAMIENTO ========== */
+.rtv {
+  position: relative;
+}

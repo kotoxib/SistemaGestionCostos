@@ -1,0 +1,136 @@
+/* RESET */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  outline: none;
+  text-decoration: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* SCROLLBAR GLOBAL
+══════════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(244, 121, 32, 0.3);
+  border-radius: 99px;
+}
+
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+p {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+a {
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1;
+  color: var(--color-prim);
+
+  &:hover {
+    color: var(--color-prim-dark);
+  }
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  font-family: var(--font-prim);
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+input {
+  outline: none;
+  border-color: inherit;
+  font-family: var(--font-prim);
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &[type=number] {
+    -moz-appearance: textfield;
+  }
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+figure {
+  margin: 0;
+}
+
+img {
+  display: block;
+  margin: 0;
+  max-width: 100%;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: var(--font-prim);
+}
+
+label {
+  line-height: 1;
+  font-weight: 500;
+  color: var(--color-text);
+}

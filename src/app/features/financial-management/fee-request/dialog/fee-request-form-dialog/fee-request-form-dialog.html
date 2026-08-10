@@ -1,0 +1,172 @@
+<section class="ff-shell">
+  <header class="ff-header">
+    <div>
+      <h2>{{ title() }}</h2>
+      <p>{{ subtitle() }}</p>
+    </div>
+
+    <button class="ff-close" type="button" (click)="close()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="ff-body">
+    <p class="ff-section-title">Identificación</p>
+    <div class="ff-grid">
+      <div class="ff-field">
+        <label for="ff-code">Código de Solicitud</label>
+        <input id="ff-code" pInputText type="text" [value]="code" disabled title="Generado automáticamente" />
+      </div>
+
+      <div class="ff-field">
+        <label for="ff-case">Nro. de Caso @if (!isView) {<strong>*</strong>}</label>
+        <p-select
+          inputId="ff-case"
+          [(ngModel)]="selectedCaseNumber"
+          [options]="caseOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar"
+          [disabled]="isView" />
+      </div>
+
+      <div class="ff-field">
+        <label for="ff-client">Cliente</label>
+        <input id="ff-client" pInputText type="text" [value]="clientName()" disabled placeholder="Auto-completado" />
+      </div>
+
+      <div class="ff-field">
+        <label for="ff-file">N° de Expediente</label>
+        <input id="ff-file" pInputText type="text" [value]="fileNumber()" disabled placeholder="Auto-completado" />
+      </div>
+
+      <div class="ff-field">
+        <label for="ff-court">Juzgado</label>
+        <input id="ff-court" pInputText type="text" [value]="court()" disabled placeholder="Auto-completado" />
+      </div>
+    </div>
+
+    <p class="ff-section-title ff-mt">Datos del Gasto</p>
+    <div class="ff-grid">
+      <div class="ff-field">
+        <label for="ff-expense-type">Tipo de Gasto @if (!isView) {<strong>*</strong>}</label>
+        <p-select
+          inputId="ff-expense-type"
+          [(ngModel)]="selectedExpenseType"
+          (ngModelChange)="onExpenseTypeChange()"
+          [options]="expenseTypeOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar"
+          [disabled]="isView" />
+      </div>
+
+      <div class="ff-field">
+        <label for="ff-concept">Nombre de Gasto @if (!isView) {<strong>*</strong>}</label>
+        <p-select
+          inputId="ff-concept"
+          [(ngModel)]="selectedConcept"
+          [options]="feeTypeOptions()"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar"
+          [disabled]="isView || !selectedExpenseType()" />
+      </div>
+
+      <div class="ff-field">
+        <label for="ff-amount">Importe @if (!isView) {<strong>*</strong>}</label>
+        <div class="ff-amount-box">
+          <span>S/</span>
+          <input
+            id="ff-amount"
+            type="number"
+            min="0"
+            step="0.01"
+            [(ngModel)]="amount"
+            [disabled]="isView"
+            placeholder="0.00" />
+        </div>
+      </div>
+
+      <div class="ff-field">
+        <label for="ff-requester">Solicitante</label>
+        <input id="ff-requester" pInputText type="text" [value]="requesterName()" disabled />
+      </div>
+
+      <div class="ff-field">
+        <label for="ff-date">Fecha @if (!isView) {<strong>*</strong>}</label>
+        <p-datepicker
+          inputId="ff-date"
+          [(ngModel)]="requestDate"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true"
+          appendTo="body"
+          [disabled]="isView" />
+      </div>
+
+      <div class="ff-field ff-checkbox-field">
+        <label>Reembolsable</label>
+        <p-checkbox [(ngModel)]="isRefundableChecked" [binary]="true" inputId="ff-refund" [disabled]="isView" />
+      </div>
+    </div>
+
+    <p class="ff-section-title ff-mt">Detalles</p>
+
+    @if (!isView) {
+      <div class="ff-field">
+        <label>Adjuntar el Pago</label>
+        <div class="ff-dropzone">
+          <i class="pi pi-upload" aria-hidden="true"></i>
+          <p>{{ attachmentName() ?? 'Adjuntar comprobante de pago' }}</p>
+          <button type="button" class="ff-attach-button" (click)="attachFile()">Seleccionar archivo</button>
+        </div>
+      </div>
+    } @else if (attachmentName()) {
+      <div class="ff-field">
+        <label>Comprobante de Pago</label>
+        <input pInputText type="text" [value]="attachmentName()" disabled />
+      </div>
+    }
+
+    @if (requiresFinalDocument()) {
+      @if (!isView) {
+        <div class="ff-field ff-mt">
+          <label>Documento Final</label>
+          <div class="ff-dropzone">
+            <i class="pi pi-upload" aria-hidden="true"></i>
+            <p>{{ finalDocumentName() ?? 'Adjuntar documento final' }}</p>
+            <button type="button" class="ff-attach-button" (click)="attachFinalDocument()">Seleccionar archivo</button>
+          </div>
+          <p class="ff-hint">Requerido para que este gasto quede disponible en Reembolsos.</p>
+        </div>
+      } @else if (finalDocumentName()) {
+        <div class="ff-field ff-mt">
+          <label>Documento Final</label>
+          <input pInputText type="text" [value]="finalDocumentName()" disabled />
+        </div>
+      }
+    } @else if (selectedExpenseType() === 'Judicial' && !isView) {
+      <p class="ff-hint ff-mt">Marca "Reembolsable" para poder adjuntar el Documento Final.</p>
+    }
+
+    <div class="ff-field ff-mt">
+      <label for="ff-observation">Comentarios</label>
+      <textarea
+        id="ff-observation"
+        pTextarea
+        rows="2"
+        [(ngModel)]="observation"
+        placeholder="Comentarios adicionales (opcional)"
+        [disabled]="isView"></textarea>
+    </div>
+  </div>
+
+  <footer class="ff-footer">
+    @if (isView) {
+      <button class="ff-secondary" type="button" (click)="close()">Cerrar</button>
+    } @else {
+      <button class="ff-secondary" type="button" (click)="close()">Cancelar</button>
+      <button class="ff-primary" type="button" [disabled]="!canSave" (click)="save()">Guardar</button>
+    }
+  </footer>
+</section>

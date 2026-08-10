@@ -1,0 +1,62 @@
+<section class="du-shell">
+  <header class="du-header">
+    <div>
+      <h2>Cargar Documentos – {{ row.code }}</h2>
+      <p>{{ row.caseNumber }} · {{ row.clientName }}</p>
+    </div>
+
+    <button class="du-close" type="button" (click)="close()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="du-body">
+    <div class="du-field">
+      <label for="du-expense">Registro de Gasto (Arancel)</label>
+      <div class="du-file-row">
+        <span class="du-file-name">{{ expenseRecordFileName() || 'Sin archivo' }}</span>
+        <label class="du-file-button">
+          Seleccionar
+          <input id="du-expense" type="file" (change)="onFileSelect('expenseRecord', $event)" hidden />
+        </label>
+      </div>
+    </div>
+
+    <div class="du-field" [class.du-disabled]="isAdministrative">
+      <label for="du-final">
+        Documento Final
+        @if (isAdministrative) {
+          <span class="du-na">No aplica para gastos administrativos</span>
+        }
+      </label>
+      <div class="du-file-row">
+        <span class="du-file-name">{{ finalDocumentFileName() || 'Sin archivo' }}</span>
+        <label class="du-file-button">
+          Seleccionar
+          <input
+            id="du-final"
+            type="file"
+            [disabled]="isAdministrative"
+            (change)="onFileSelect('finalDocument', $event)"
+            hidden />
+        </label>
+      </div>
+    </div>
+
+    <div class="du-field">
+      <label for="du-state">Documento de Estado</label>
+      <div class="du-file-row">
+        <span class="du-file-name">{{ stateDocumentFileName() || 'Sin archivo' }}</span>
+        <label class="du-file-button">
+          Seleccionar
+          <input id="du-state" type="file" (change)="onFileSelect('stateDocument', $event)" hidden />
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <footer class="du-footer">
+    <button class="du-secondary" type="button" (click)="close()">Cancelar</button>
+    <button class="du-primary" type="button" (click)="save()">Guardar</button>
+  </footer>
+</section>

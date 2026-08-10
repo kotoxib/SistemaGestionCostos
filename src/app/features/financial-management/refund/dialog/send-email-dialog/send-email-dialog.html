@@ -1,0 +1,64 @@
+<section class="se-shell">
+  <header class="se-header">
+    <div>
+      <h2>Envío de Documento por Correo</h2>
+      <p>Redacta y envía el documento a los contactos del cliente</p>
+    </div>
+
+    <button class="se-close" type="button" (click)="close()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="se-body">
+    <div class="se-field">
+      <label class="se-label" for="se-from">De</label>
+      <input id="se-from" class="se-input se-input-readonly" type="text" [value]="fromEmail" readonly />
+    </div>
+
+    <div class="se-field">
+      <label class="se-label" for="se-to">Para <span class="se-required">*</span></label>
+      <p-multiSelect
+        inputId="se-to"
+        [(ngModel)]="selectedTo"
+        [options]="contactOptions"
+        optionLabel="label"
+        optionValue="value"
+        display="chip"
+        placeholder="Selecciona los destinatarios"
+        [showToggleAll]="false"
+        appendTo="body" />
+    </div>
+
+    <div class="se-field">
+      <label class="se-label" for="se-cc">CC</label>
+      <input id="se-cc" class="se-input" type="text" [(ngModel)]="cc" placeholder="correo@ejemplo.com (opcional)" />
+    </div>
+
+    <div class="se-field">
+      <label class="se-label" for="se-subject">Asunto <span class="se-required">*</span></label>
+      <input id="se-subject" class="se-input" type="text" [(ngModel)]="subject" />
+    </div>
+
+    <div class="se-field">
+      <label class="se-label" for="se-message">Mensaje</label>
+      <textarea id="se-message" class="se-textarea" pTextarea rows="6" [(ngModel)]="message"></textarea>
+    </div>
+
+    <div class="se-attachment">
+      <i class="pi pi-file" aria-hidden="true"></i>
+      <div class="se-attachment-info">
+        <strong>{{ attachmentName }}</strong>
+        <span>Formato de reembolso · Adjunto automático</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="se-footer">
+    <button class="se-secondary" type="button" (click)="close()">Cancelar</button>
+    <button class="se-primary" type="button" [disabled]="!canSend" (click)="send()">
+      <i class="pi pi-send" aria-hidden="true"></i>
+      Enviar Correo
+    </button>
+  </footer>
+</section>

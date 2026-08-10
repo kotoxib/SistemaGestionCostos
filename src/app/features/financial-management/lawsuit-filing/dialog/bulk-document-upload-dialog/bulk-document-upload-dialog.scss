@@ -1,0 +1,270 @@
+:host {
+  display: block;
+}
+
+.bd-shell {
+  overflow: hidden;
+  border-radius: 18px;
+  background: #ffffff;
+  color: #202532;
+}
+
+.bd-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px 30px 20px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.bd-header h2 {
+  margin: 0 0 6px;
+  color: #202532;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.bd-header p {
+  margin: 0;
+  color: #566074;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.bd-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #9aa3b3;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.bd-close:hover {
+  background: #f4f6f9;
+  color: #df6a18;
+}
+
+.bd-body {
+  padding: 26px 30px 24px;
+}
+
+.bd-dropzone {
+  display: flex;
+  min-height: 160px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 26px;
+  margin-bottom: 16px;
+  border: 2px dashed #d9dee8;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: center;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.bd-dropzone.drag-over {
+  border-color: #df6a18;
+  background: #fff6ee;
+}
+
+.bd-file-input {
+  display: none;
+}
+
+.bd-dropzone i {
+  color: #c9d0dc;
+  font-size: 30px;
+}
+
+.bd-dropzone p {
+  margin: 6px 0 0;
+  color: #566074;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.bd-template-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 176px;
+  min-height: 36px;
+  padding: 0 22px;
+  border: 1px solid #d9dee8;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #f26f16;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.bd-template-button:hover {
+  border-color: #df6a18;
+  background: #fff8f1;
+}
+
+.bd-selected-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  color: #1f9d55;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.bd-file-error {
+  display: inline-flex;
+  margin-top: 2px;
+  color: #ef4444;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.bd-summary {
+  margin: 0 0 14px;
+  color: #566074;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.bd-summary strong {
+  color: #1f9d55;
+  font-weight: 900;
+}
+
+.bd-preview-card {
+  overflow: hidden;
+  border: 1px solid #dfe5ee;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.bd-code {
+  color: #df6a18;
+  font-weight: 800;
+}
+
+.text-muted {
+  color: #9099aa;
+}
+
+.txt-center {
+  text-align: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  padding: 0 11px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.badge-active {
+  background: #ddf7df;
+  color: #48a64e;
+}
+
+.badge-inactive {
+  background: #fde2e2;
+  color: #c92828;
+}
+
+.bd-empty {
+  padding: 30px !important;
+  text-align: center;
+  color: #202532;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.bd-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 18px 30px 24px;
+  border-top: 1px solid #edf0f5;
+}
+
+.bd-cancel,
+.bd-upload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-width: 140px;
+  min-height: 38px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.bd-cancel {
+  border: 1px solid #d9dee8;
+  background: #ffffff;
+  color: #4a5364;
+}
+
+.bd-upload {
+  border: 1px solid #ff7420;
+  background: #ff7420;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(255, 116, 32, 0.24);
+}
+
+.bd-upload:disabled {
+  border-color: #fac5a6;
+  background: #fac5a6;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+:host ::ng-deep .p-datatable-thead > tr > th {
+  padding: 12px 13px;
+  border-color: #e3e8f0;
+  background: #f8fafc;
+  color: #657083;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .p-datatable-tbody > tr > td {
+  padding: 12px 13px;
+  border-color: #edf0f5;
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .bd-header,
+  .bd-body,
+  .bd-footer {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .bd-cancel,
+  .bd-upload {
+    width: 100%;
+  }
+}

@@ -1,0 +1,132 @@
+<section class="income-page">
+  <div class="page-header">
+    <div>
+      <h1>Gestión de Ingresos</h1>
+      <p>Pagos y cobranza por caso judicial</p>
+    </div>
+
+    <button class="primary-action" type="button" (click)="openNewIncomeDialog()">
+      <i class="pi pi-plus" aria-hidden="true"></i>
+      <span>Nuevo Ingreso</span>
+    </button>
+  </div>
+
+  <div class="filters-row">
+    <label class="search-box">
+      <i class="pi pi-search" aria-hidden="true"></i>
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por Nro. Ingreso, Nro. Caso, Cliente…" />
+    </label>
+
+    <p-datepicker
+      [(ngModel)]="registrationDate"
+      placeholder="Fecha de Registro"
+      dateFormat="yy-mm-dd"
+      [showIcon]="true"
+      appendTo="body" />
+
+    <p-select
+      [(ngModel)]="selectedState"
+      [options]="stateOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Estado"
+      [showClear]="true" />
+
+    @if (searchTerm || registrationDate || selectedState) {
+      <button class="clear-filters" type="button" (click)="clearFilters()">Limpiar</button>
+    }
+  </div>
+
+  <div class="table-card">
+    <div class="table-card-header">
+      <p>Listado de Ingresos</p>
+      <span>{{ filteredIncomes.length }} registros</span>
+    </div>
+
+    <p-table
+      [value]="filteredIncomes"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 25]"
+      [tableStyle]="{ 'min-width': '1160px' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>NRO. INGRESO</th>
+          <th>NRO. CASO</th>
+          <th>CLIENTE</th>
+          <th>MONEDA</th>
+          <th class="txt-right">MONTO CASO</th>
+          <th class="txt-right">MONTO PAGADO</th>
+          <th class="txt-right">SALDO</th>
+          <th>% COBRADO</th>
+          <th class="txt-center">ESTADO</th>
+          <th>ÚLT. PAGO</th>
+          <th class="txt-center">ACCIONES</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td class="income-number">{{ row.incomeNumber }}</td>
+          <td class="mono">{{ row.caseNumber }}</td>
+          <td class="cell-bold">{{ row.clientName }}</td>
+          <td>{{ row.currency }}</td>
+          <td class="txt-right">S/ {{ row.caseAmount | number: '1.2-2' }}</td>
+          <td class="txt-right" [class.text-green]="row.paidPercentage === 100" [class.text-muted]="row.paidPercentage === 0">
+            S/ {{ row.paidAmount | number: '1.2-2' }}
+          </td>
+          <td class="txt-right" [class.text-green]="row.paidPercentage === 100" [class.text-red]="row.paidPercentage === 0">
+            S/ {{ row.balance | number: '1.2-2' }}
+          </td>
+          <td>
+            <div class="progress-cell">
+              <div class="progress-track">
+                <div
+                  class="progress-fill"
+                  [style.width.%]="row.paidPercentage"
+                  [style.background]="progressColor(row.state)"
+                ></div>
+              </div>
+              <span [style.color]="progressColor(row.state)">{{ row.paidPercentage }}%</span>
+            </div>
+          </td>
+          <td class="txt-center">
+            <span class="badge" [ngClass]="stateBadgeClass(row.state)">{{ row.state }}</span>
+          </td>
+          <td class="text-muted">{{ row.lastPaymentDate ?? '—' }}</td>
+          <td class="txt-center">
+            <div class="row-actions">
+              <button class="btn-icon btn-view" title="Ver detalle" (click)="openViewIncomeDialog(row)">
+                <i class="pi pi-eye"></i>
+              </button>
+              <button
+                class="btn-icon btn-edit"
+                title="Editar"
+                [disabled]="row.state === 'Pagado'"
+                (click)="openEditIncomeDialog(row)">
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button
+                class="btn-icon btn-del"
+                title="Eliminar"
+                [disabled]="row.state === 'Pagado'"
+                (click)="openDeleteConfirm(row)">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="11" class="empty-table">No hay ingresos registrados</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>

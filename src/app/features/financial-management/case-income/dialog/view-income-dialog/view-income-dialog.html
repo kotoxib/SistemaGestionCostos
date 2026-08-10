@@ -1,0 +1,92 @@
+<section class="vi-shell">
+  <header class="vi-header">
+    <div>
+      <h2>Detalle de Ingreso – {{ income.incomeNumber }}</h2>
+      <p>Información completa del ingreso y su historial de pagos</p>
+    </div>
+
+    <button class="vi-close" type="button" (click)="close()">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="vi-body">
+    <div class="vi-summary">
+      <div class="vi-item">
+        <p class="vi-label">Nro. Ingreso</p>
+        <p class="vi-value vi-mono vi-orange">{{ income.incomeNumber }}</p>
+      </div>
+      <div class="vi-item">
+        <p class="vi-label">Nro. Caso</p>
+        <p class="vi-value vi-mono">{{ income.caseNumber }}</p>
+      </div>
+      <div class="vi-item">
+        <p class="vi-label">Cliente</p>
+        <p class="vi-value vi-bold">{{ income.clientName }}</p>
+      </div>
+      <div class="vi-item">
+        <p class="vi-label">Moneda</p>
+        <p class="vi-value">{{ income.currency }} – Soles</p>
+      </div>
+      <div class="vi-item">
+        <p class="vi-label">Monto del Caso</p>
+        <p class="vi-value vi-bold">S/ {{ income.caseAmount | number: '1.2-2' }}</p>
+      </div>
+      <div class="vi-item">
+        <p class="vi-label">Monto Pagado</p>
+        <p class="vi-value vi-bold" [class.vi-green]="income.paidAmount > 0">
+          S/ {{ income.paidAmount | number: '1.2-2' }}
+        </p>
+      </div>
+      <div class="vi-item">
+        <p class="vi-label">Saldo</p>
+        <p class="vi-value" [class.vi-green]="income.balance === 0">
+          S/ {{ income.balance | number: '1.2-2' }}
+        </p>
+      </div>
+      <div class="vi-item">
+        <p class="vi-label">Estado</p>
+        <span
+          class="vi-badge"
+          [class.vi-badge-active]="income.state === 'Pagado'"
+          [class.vi-badge-warn]="income.state === 'En proceso'"
+          [class.vi-badge-inactive]="income.state === 'Sin pagos'">
+          {{ income.state }}
+        </span>
+      </div>
+    </div>
+
+    <p class="vi-section-title">Historial de Pagos</p>
+
+    <table class="vi-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Monto</th>
+          <th>Medio de Pago</th>
+          <th>Usuario</th>
+          <th>Documento</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (payment of income.payments; track payment.id) {
+          <tr>
+            <td>{{ payment.date }}</td>
+            <td class="vi-green vi-bold">S/ {{ payment.amount | number: '1.2-2' }}</td>
+            <td>{{ payment.paymentMethod }}</td>
+            <td class="vi-muted">{{ payment.user }}</td>
+            <td class="vi-mono">{{ payment.documentNumber ?? '—' }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="vi-empty">Sin pagos registrados</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="vi-footer">
+    <button class="vi-secondary" type="button" (click)="close()">Cerrar</button>
+  </footer>
+</section>

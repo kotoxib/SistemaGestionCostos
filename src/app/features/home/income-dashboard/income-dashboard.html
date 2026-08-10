@@ -1,0 +1,146 @@
+<section class="dashboard-page">
+  <header class="dashboard-header">
+    <div>
+      <h1>Dashboard de Ingresos</h1>
+      <p>Consolidado de ingresos proyectados y reales por caso del módulo SGC</p>
+    </div>
+  </header>
+
+  <div class="filters-row">
+    <p-select
+      [(ngModel)]="selectedYear"
+      [options]="yearOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Año"
+      [showClear]="true" />
+
+    <p-select
+      [(ngModel)]="selectedMonth"
+      [options]="monthOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Mes"
+      [showClear]="true" />
+
+    <p-select
+      [(ngModel)]="selectedAttorney"
+      [options]="attorneyOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Abogado Asignado"
+      [showClear]="true" />
+
+    @if (selectedYear() || selectedMonth() || selectedAttorney()) {
+      <button type="button" class="clear-filters" (click)="clearFilters()">Limpiar</button>
+    }
+  </div>
+
+  <section class="kpi-grid">
+    <article class="kpi-card">
+      <span class="kpi-label">Total ingresos</span>
+      <strong class="kpi-value kpi-dark">{{ incomeTotal() | number }}</strong>
+      <span class="kpi-detail detail-blue">Casos según los filtros</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Monto proyectado</span>
+      <strong class="kpi-value kpi-dark">S/ {{ totalProjected() | number: '1.2-2' }}</strong>
+      <span class="kpi-detail detail-blue">Suma de montos totales de caso</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Ingresos reales</span>
+      <strong class="kpi-value kpi-orange">S/ {{ totalReal() | number: '1.2-2' }}</strong>
+      <span class="kpi-detail detail-green">Pagos registrados en Ingresos</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Saldo pendiente</span>
+      <strong class="kpi-value kpi-red">S/ {{ totalBalance() | number: '1.2-2' }}</strong>
+      <span class="kpi-detail detail-red">Diferencia entre lo proyectado y lo real</span>
+    </article>
+  </section>
+
+  <section class="charts-grid">
+    <article class="panel-card chart-card">
+      <div class="panel-header">
+        <h2>Ingresos por Estado</h2>
+      </div>
+
+      <div class="doughnut-box">
+        <canvas
+          baseChart
+          [type]="'doughnut'"
+          [data]="incomeStateChartData()"
+          [options]="incomeStateChartOptions"
+        ></canvas>
+        <div class="doughnut-center">
+          <strong>{{ incomeTotal() | number }}</strong>
+          <span>Ingresos</span>
+        </div>
+      </div>
+
+      <div class="chart-legend">
+        <div class="legend-item"><span class="dot dot-green"></span>Pagado</div>
+        <div class="legend-item"><span class="dot dot-orange"></span>En proceso</div>
+        <div class="legend-item"><span class="dot dot-red"></span>Sin pagos</div>
+      </div>
+    </article>
+
+    <article class="panel-card chart-card">
+      <div class="panel-header">
+        <h2>Casos con Ingreso Completo vs Pendientes de Cobro</h2>
+      </div>
+
+      <div class="progress-list">
+        @for (metric of progressMetrics(); track metric.label) {
+          <div class="progress-row">
+            <div class="progress-row-head">
+              <span>{{ metric.label }}</span>
+              <strong [ngClass]="'text-' + metric.tone">{{ metric.value }}</strong>
+            </div>
+            <div class="progress-track">
+              <div
+                class="progress-fill"
+                [ngClass]="'fill-' + metric.tone"
+                [style.width.%]="metric.percentage"
+              >
+                <span>{{ metric.percentage }}%</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="progress-total">
+          <span>Total de casos</span>
+          <strong>{{ caseTotal() | number }}</strong>
+        </div>
+        <div class="progress-period">
+          <span>Pendientes: casos con saldo por cobrar</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel-card chart-card chart-card-wide">
+      <div class="panel-header vs-panel-header">
+        <h2>Monto Proyectado vs Monto Real</h2>
+        <span class="axis-label">{{ vsChartAxisLabel() }}</span>
+      </div>
+
+      <div class="chart-legend chart-legend-top">
+        <div class="legend-item"><span class="dot dot-hollow" style="--dot-color: #4B5563"></span>Proyectado</div>
+        <div class="legend-item"><span class="dot dot-hollow" style="--dot-color: #22C55E"></span>Real</div>
+      </div>
+
+      <div class="chart-box">
+        <canvas
+          baseChart
+          [type]="'line'"
+          [data]="projectedVsRealChartData()"
+          [options]="projectedVsRealChartOptions"
+        ></canvas>
+      </div>
+    </article>
+  </section>
+</section>

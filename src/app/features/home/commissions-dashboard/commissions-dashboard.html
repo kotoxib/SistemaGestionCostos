@@ -1,0 +1,206 @@
+<section class="dashboard-page">
+  <header class="dashboard-header">
+    <div>
+      <h1>Dashboard de Comisiones</h1>
+      <p>Resumen de comisiones generadas, adelantadas y pendientes por abogado</p>
+    </div>
+  </header>
+
+  <div class="filters-row">
+    <p-select
+      [(ngModel)]="selectedYear"
+      [options]="yearOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Año"
+      [showClear]="true" />
+
+    <p-select
+      [(ngModel)]="selectedMonth"
+      [options]="monthOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Mes"
+      [showClear]="true" />
+
+    <p-select
+      [(ngModel)]="selectedAttorney"
+      [options]="attorneyOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Abogado Asignado"
+      [showClear]="true" />
+
+    @if (selectedYear() || selectedMonth() || selectedAttorney()) {
+      <button type="button" class="clear-filters" (click)="clearFilters()">Limpiar</button>
+    }
+  </div>
+
+  <section class="kpi-grid">
+    <article class="kpi-card">
+      <span class="kpi-label">Abogados con comisiones</span>
+      <strong class="kpi-value kpi-dark">{{ kpis().totalAttorneys }}</strong>
+      <span class="kpi-detail kpi-breakdown">
+        <span class="text-pending">{{ kpis().pendiente }} pendiente{{ kpis().pendiente !== 1 ? 's' : '' }}</span>
+        <span class="dot-sep">·</span>
+        <span class="text-partial">{{ kpis().parcial }} parcial{{ kpis().parcial !== 1 ? 'es' : '' }}</span>
+      </span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Comisión total generada</span>
+      <strong class="kpi-value kpi-dark">S/ {{ kpis().totalCommission | number: '1.0-0' }}</strong>
+      <span class="kpi-detail">Todos los casos comisionables</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Total desembolsado</span>
+      <strong class="kpi-value kpi-orange">S/ {{ kpis().totalDisbursed | number: '1.0-0' }}</strong>
+      <span class="kpi-detail">Adelantos + pagos registrados</span>
+    </article>
+
+    <article class="kpi-card">
+      <span class="kpi-label">Saldo por pagar</span>
+      <strong class="kpi-value" [class.kpi-dark]="kpis().totalBalance > 0" [class.kpi-green]="kpis().totalBalance === 0">
+        S/ {{ kpis().totalBalance | number: '1.0-0' }}
+      </strong>
+      @if (kpis().pagado > 0) {
+        <span class="kpi-detail detail-green">
+          {{ kpis().pagado }} abogado{{ kpis().pagado !== 1 ? 's' : '' }} liquidado{{ kpis().pagado !== 1 ? 's' : '' }}
+        </span>
+      }
+    </article>
+  </section>
+
+  <section class="charts-grid">
+    <article class="panel-card chart-card">
+      <div class="panel-header">
+        <h2>Comisiones por Estado</h2>
+      </div>
+
+      <div class="doughnut-box">
+        <canvas
+          baseChart
+          [type]="'doughnut'"
+          [data]="commissionStateChartData()"
+          [options]="commissionStateChartOptions"
+        ></canvas>
+        <div class="doughnut-center">
+          <strong>{{ kpis().totalAttorneys | number }}</strong>
+          <span>Abogados</span>
+        </div>
+      </div>
+
+      <div class="chart-legend">
+        <div class="legend-item"><span class="dot dot-amber"></span>Pendiente</div>
+        <div class="legend-item"><span class="dot dot-orange"></span>Parcial</div>
+        <div class="legend-item"><span class="dot dot-green"></span>Pagado</div>
+      </div>
+    </article>
+
+    <article class="panel-card chart-card">
+      <div class="panel-header">
+        <h2>Abogados Liquidados vs Pendientes de Pago</h2>
+      </div>
+
+      <div class="progress-list">
+        @for (metric of progressMetrics(); track metric.label) {
+          <div class="progress-row">
+            <div class="progress-row-head">
+              <span>{{ metric.label }}</span>
+              <strong [ngClass]="'text-' + metric.tone">{{ metric.value }}</strong>
+            </div>
+            <div class="progress-track">
+              <div
+                class="progress-fill"
+                [ngClass]="'fill-' + metric.tone"
+                [style.width.%]="metric.percentage"
+              >
+                <span>{{ metric.percentage }}%</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="progress-total">
+          <span>Total de abogados</span>
+          <strong>{{ kpis().totalAttorneys | number }}</strong>
+        </div>
+        <div class="progress-period">
+          <span>Pendientes: comisiones con saldo por pagar</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel-card chart-card chart-card-wide">
+      <div class="panel-header vs-panel-header">
+        <h2>Comisión Generada vs Desembolsada</h2>
+        <span class="axis-label">{{ vsChartAxisLabel() }}</span>
+      </div>
+
+      <div class="chart-legend chart-legend-top">
+        <div class="legend-item"><span class="dot dot-hollow" style="--dot-color: #4B5563"></span>Generada</div>
+        <div class="legend-item"><span class="dot dot-hollow" style="--dot-color: #F47920"></span>Desembolsada</div>
+      </div>
+
+      <div class="chart-box">
+        <canvas
+          baseChart
+          [type]="'line'"
+          [data]="generatedVsDisbursedChartData()"
+          [options]="generatedVsDisbursedChartOptions"
+        ></canvas>
+      </div>
+    </article>
+  </section>
+
+  <section class="table-card">
+    <div class="table-card-header">
+      <span class="accent-bar"></span>
+      <h2>Resumen por Abogado</h2>
+    </div>
+
+    <p-table [value]="attorneys()" [tableStyle]="{ 'min-width': '760px' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Abogado</th>
+          <th class="txt-right">Comisión Total</th>
+          <th class="txt-right">Desembolsado</th>
+          <th class="txt-right">Saldo Pendiente</th>
+          <th class="txt-center">Estado</th>
+          <th class="txt-center">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td class="cell-bold">{{ row.attorney }}</td>
+          <td class="txt-right tabular">S/ {{ row.totalCommission | number: '1.2-2' }}</td>
+          <td class="txt-right tabular text-orange">S/ {{ row.disbursed | number: '1.2-2' }}</td>
+          <td class="txt-right tabular cell-bold" [class.text-green]="row.balance === 0">
+            S/ {{ row.balance | number: '1.2-2' }}
+          </td>
+          <td class="txt-center">
+            <span class="state-badge" [ngClass]="getStateClass(row.state)">{{ row.state }}</span>
+          </td>
+          <td class="txt-center">
+            <a
+              class="btn-icon btn-view"
+              [routerLink]="['/commissions-management']"
+              [queryParams]="{ attorneyId: row.id }"
+              title="Ver detalle de comisiones"
+            >
+              <i class="pi pi-eye"></i>
+            </a>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="empty-table">No hay comisiones registradas</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </section>
+</section>
